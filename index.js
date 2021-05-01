@@ -13,11 +13,14 @@ client.login(token);
 client.commands = new Discord.Collection();
 const knownCommands = [];
   /* fs.readdirSync returns an array of all file names in that directory */
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-for (const file of commandFiles) {
-  const command = require(`./commands/${file}`);
-  client.commands.set(command.name, command);
-  knownCommands.push(command.name);
+const commandFolders = fs.readdirSync('./commands');
+for (const folder of commandFolders) {
+  const commandFiles = fs.readdirSync(`./commands/${folder}`).filter(file => file.endsWith('.js'))
+  for (const file of commandFiles) {
+    const command = require(`./commands/${folder}/${file}`);
+    client.commands.set(command.name, command);
+    knownCommands.push(command.name);
+  }
 }
 
 // Basic listeners 
@@ -46,11 +49,11 @@ client.on('message', async msg => {
   // check what to execute 
   const serverQueue = queue.get(msg.guild.id); // guild == server
   const args = msg.content.slice(prefix.length).trim().split(/ +/);
-  const command = args.shift().toLowerCase(); // shift takes first elem and discards it
-  console.log(args);
-  console.log(command);
+  const commandName = args.shift().toLowerCase(); // shift takes first elem and discards it
+  console.log("LOG: [" + args + "]");
+  console.log("LOG: " + commandName);
 
-  if (!client.commands.has(command)) {
+  if (!client.commands.has(commandName)) {
     let reply = "I only know ";
     knownCommands.forEach(function(item) {
       reply += `\`${item}\`, `;
@@ -58,23 +61,25 @@ client.on('message', async msg => {
     reply += "and- no more dechu..."
     return msg.channel.send(reply);
   }
-  
+  const command = client.commands.get(commandName);
+  if (command.args && args.length != command.args) {
+    let reply = `${msg.author}, please provide arguments :pray:`;
+    if (command.usage) {
+      reply += `\`\`\`${prefix}${command.name} ${command.usage}\`\`\``;
+    }
+    msg.channel.send(reply);
+    return;
+  }
   try {
-    client.commands.get(command).execute(msg, args);
+    command.execute(msg, args);
   } catch (error) {
     console.error(error);
     msg.reply('i messed up dechu... that command no work');
   }
 });
 
-async function execute(message, serverQueue) {
-  return message.channel.send("hello!");
-}
-
-function skip(message, serverQueue) {
-  return message.channel.send("skippu...");
-}
-
-function stop(message, serverQueue) {
-  return message.channel.send("yamete...");
+module.exports = {
+  getClient: function() {
+    return client;
+  }
 }
