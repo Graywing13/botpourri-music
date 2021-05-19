@@ -1,5 +1,6 @@
 module.exports = { 
   name: 'play',
+  alias: 'p',
   description: 'play <song url>',
   args: true,
   usage: "<song url>",

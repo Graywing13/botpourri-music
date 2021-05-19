@@ -11,15 +11,17 @@ client.login(token);
 
 // retrieves commands files 
 client.commands = new Discord.Collection();
-const knownCommands = [];
+client.cmdAlias = new Discord.Collection();
   /* fs.readdirSync returns an array of all file names in that directory */
-const commandFolders = fs.readdirSync('./commands');
+const commandFolders = fs.readdirSync('./commands').filter(file => !file.endsWith('.txt'));
 for (const folder of commandFolders) {
   const commandFiles = fs.readdirSync(`./commands/${folder}`).filter(file => file.endsWith('.js'))
   for (const file of commandFiles) {
     const command = require(`./commands/${folder}/${file}`);
     client.commands.set(command.name, command);
-    knownCommands.push(command.name);
+    if (command.alias) {
+      client.cmdAlias.set(command.alias, command);
+    }
   }
 }
 
@@ -53,15 +55,21 @@ client.on('message', async msg => {
   console.log("LOG: [" + args + "]");
   console.log("LOG: " + commandName);
 
-  if (!client.commands.has(commandName)) {
+  // figure out whether user inputted valid command
+  let command;
+  if (client.commands.has(commandName)) {
+    command = client.commands.get(commandName);
+  } else if (client.cmdAlias.has(commandName)) {
+    command = client.cmdAlias.get(commandName);
+  } else {
     let reply = "I only know ";
-    knownCommands.forEach(function(item) {
+    console.log("TEST: client commands: " + client.commands.keys());
+    for (let item of client.commands.keys()) {
       reply += `\`${item}\`, `;
-    });
+    }
     reply += "and- no more dechu..."
     return msg.channel.send(reply);
   }
-  const command = client.commands.get(commandName);
   if (command.args && args.length != command.args) {
     let reply = `${msg.author}, please provide arguments :pray:`;
     if (command.usage) {

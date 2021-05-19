@@ -1,0 +1,16 @@
+Code in this folder follows the following guidelines: 
+
+module.exports = { 
+  name: '{lowercase command name without spacees}',
+  alias: '(optional) {an alias for the command name}',
+  description: 'text given in the help page',
+  args: {[true / false(default)], whether arguments are mandatory for this command},
+  usage: "(optional) {<arg_description> <arg2_description...>}",
+  execute: async function(msg, args) {
+    {
+      body of the function. 
+        msg is the message object sent by the user into discord.
+        args are the arguments that came with the message object, in plain text.
+    }
+  }
+}
