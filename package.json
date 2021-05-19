@@ -9,7 +9,10 @@
   "author": "ss13",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^12.5.3"
+    "@discordjs/opus": "^0.5.0",
+    "discord.js": "^12.5.3",
+    "ffmpeg": "0.0.4",
+    "node-opus": "^0.3.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.13.16",

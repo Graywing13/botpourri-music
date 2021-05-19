@@ -2,6 +2,7 @@ module.exports = {
   name: 'delmsg',
   description: 'b.delmsg <int 1-100>',
   args: true,
+  usage: "<integer (1-100)>",
   execute(msg, args) {
     const amount = parseInt(args[0]);
 
