@@ -15,16 +15,20 @@
 
 ## TODO list:
 Next up <br>
-- implement Now Playing  
 - implement queue  
+- implement Now Playing  
 - read google sheets cells  
-- host bot on aws  
 
 High priority <br>
+- queue
 - now playing function  
 
 Medium priority <br>
+- hash out msg.member.voice.channel
 - bot thinks it can "play" invalid files which are 0-second songs.  
+- sonarlint security hotspot handler, look into. 
+- ytld-core
+- host bot on aws  
 
 Low priority <br>
 - b.giverole is scuffed.  

@@ -5,6 +5,7 @@ module.exports = {
   alias: '(optional) {an alias for the command name}',
   description: 'text given in the help page',
   args: {[true / false(default)], whether arguments are mandatory for this command},
+  requiresServerQueue: {[true / false(default)], whether the server queue is required},
   usage: "(optional) {<arg_description> <arg2_description...>}",
   execute: async function(msg, args) {
     {

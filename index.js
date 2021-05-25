@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 const { prefix } = require('./config.json');
 const { token } = require('./gitignore.json');
 const ytdl = require('ytdl-core');
-const fs = require('fs');
+const fs = require('fs'); // some library
 
 // create client and login using token
 const client = new Discord.Client();
@@ -34,22 +34,39 @@ client.once('reconnecting', () => {
   console.log("Reconnecting!");
 });
 
-client.once('dc', () => {
+client.once('disconnect', () => {
   console.log("Disconnect!");
 });
 
 // queue
-const queue = new Map(); // queued songs
+const queue = new Map(); // queued songs for all servers
+
+// TEST: debug
+// client.on('debug', console.log);
+
 
 // have bpri read messages
 client.on('message', async msg => {
   // creates listener for message event, gets message and saves it into message obj
 
-  // 
   if (!msg.content.startsWith(prefix) || msg.author.bot) return;
+  
+  // set up serverQueue
+  // guild == server, the key of server is the queue we obtain (this bot is in multiple servers)
+  let serverQueue = queue.get(msg.guild.id); 
+  if (!serverQueue) {
+    const queueConstruct = {
+      textChannel: msg.channel,
+      voiceChannel: null, // TODO figure this out
+      connection: null,
+      songs: [],
+      playing: true
+    }
+    queue.set(msg.guild.id, queueConstruct);
+    serverQueue = queueConstruct;
+  }
 
   // check what to execute 
-  const serverQueue = queue.get(msg.guild.id); // guild == server
   const args = msg.content.slice(prefix.length).trim().split(/ +/);
   const commandName = args.shift().toLowerCase(); // shift takes first elem and discards it
   console.log("LOG: [" + args + "]");
@@ -63,7 +80,6 @@ client.on('message', async msg => {
     command = client.cmdAlias.get(commandName);
   } else {
     let reply = "I only know ";
-    console.log("TEST: client commands: " + client.commands.keys());
     for (let item of client.commands.keys()) {
       reply += `\`${item}\`, `;
     }
@@ -79,8 +95,12 @@ client.on('message', async msg => {
     return;
   }
   try {
-    command.execute(msg, args);
-  } catch (error) {
+    if (command.requiresServerQueue) {
+      command.execute(msg, serverQueue, args);
+    } else {
+      command.execute(msg, args);
+    }
+    } catch (error) {
     console.error(error);
     msg.reply('i messed up dechu... that command no work');
   }

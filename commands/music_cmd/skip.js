@@ -2,7 +2,8 @@ module.exports = {
   name: 'skip',
   description: 'skip',
   usage: "",
-  execute(msg, args) {
+  requiresServerQueue: true,
+  execute(msg, requiresServerQueue, args) {
     return msg.channel.send("skip!");
   }
 }
