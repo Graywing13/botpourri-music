@@ -54,13 +54,16 @@ client.on('message', async msg => {
   // set up serverQueue
   // guild == server, the key of server is the queue we obtain (this bot is in multiple servers)
   let serverQueue = queue.get(msg.guild.id); 
+  // -TODO big coupling here with the queueConstruct creation :blobthink:
   if (!serverQueue) {
-    const queueConstruct = {
+    let queueConstruct = {
       textChannel: msg.channel,
-      voiceChannel: null, // TODO figure this out
-      connection: null,
+      memberVoiceState: null, // https://discord.js.org/#/docs/main/stable/class/VoiceState
+      // NOTE: oh this is actually the member's voice state. 
       songs: [],
-      playing: true
+      playing: false,
+      loop: false,
+      queueLoop: false
     }
     queue.set(msg.guild.id, queueConstruct);
     serverQueue = queueConstruct;

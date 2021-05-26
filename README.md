@@ -34,3 +34,7 @@ Low priority <br>
 - b.giverole is scuffed.  
 - bot automatic help page & command descriptions  
 - check against bad command usage (e.g. users improperly inputting command args in discord)  
+
+Another Project <br>
+- build song library: make a web scraper/crawler (?) that can get the catbox link right off amq as ur playing
+- pseudo-dropdown: be able to find a list of strings that are similar to the string being typed
