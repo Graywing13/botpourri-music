@@ -15,12 +15,11 @@
 
 ## TODO list:
 Next up <br>
-- implement queue  
+- implement single song loop  
 - implement Now Playing  
 - read google sheets cells  
 
-High priority <br>
-- queue
+High priority (Done: 1) <br>
 - now playing function  
 
 Medium priority <br>
@@ -29,12 +28,14 @@ Medium priority <br>
 - sonarlint security hotspot handler, look into. 
 - ytld-core
 - host bot on aws  
+- refactor connection in play.js; it's a huge mess lol.  
 
 Low priority <br>
 - b.giverole is scuffed.  
 - bot automatic help page & command descriptions  
 - check against bad command usage (e.g. users improperly inputting command args in discord)  
+- would be nice to mutex lock serverQueue especially in play.js  
 
 Another Project <br>
-- build song library: make a web scraper/crawler (?) that can get the catbox link right off amq as ur playing
-- pseudo-dropdown: be able to find a list of strings that are similar to the string being typed
+- build song library: make a web scraper/crawler (?) that can get the catbox link right off amq as ur playing  
+- pseudo-dropdown: be able to find a list of strings that are similar to the string being typed  

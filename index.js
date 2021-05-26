@@ -18,9 +18,9 @@ for (const folder of commandFolders) {
   const commandFiles = fs.readdirSync(`./commands/${folder}`).filter(file => file.endsWith('.js'))
   for (const file of commandFiles) {
     const command = require(`./commands/${folder}/${file}`);
-    client.commands.set(command.name, command);
+    client.commands.set(command.name.toLowerCase(), command);
     if (command.alias) {
-      client.cmdAlias.set(command.alias, command);
+      client.cmdAlias.set(command.alias.toLowerCase(), command);
     }
   }
 }

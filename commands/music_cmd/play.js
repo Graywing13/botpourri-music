@@ -7,22 +7,29 @@ module.exports = {
   usage: "<song url>",
   execute: async function(msg, serverQueue, args) {
 
+    // #TODO: check if targetSong ends in a recognized format
+    //        else look up args[all] on ytld-core and set targetSong to first found song. 
+    //        let the user know which song botpourri found.  
+    let targetSong = args[0];
+    let connection = null; // +TODO figure out what this is
+
     // a private function
-    var play_next = function() {
+    var play_next = async function() {
       if (!serverQueue.songs.length) {
         serverQueue.playing = false;
         return msg.channel.send("There are no more queued songs.");
       }
+      msg.channel.send("There are `" + serverQueue.songs.length + "` songs in queue.");
       const toPlay = serverQueue.songs.shift();
 
+      msg.channel.send("Up next: `" + toPlay + "`, and the connection is `" + connection + "`.");
+
+      connection = await serverQueue.memberVoiceState.channel.join();
       let dispatcher = connection.play(toPlay);
 
       dispatcher.on('start', () => {
         msg.channel.send("Playing `" + toPlay + "`");
         serverQueue.playing = true;
-        if (serverQueue.queueLoop && !serverQueue.loop) {
-          serverQueue.songs.push(toPlay);
-        }
       });
 
       dispatcher.on('finish', () => {
@@ -41,12 +48,6 @@ module.exports = {
       });
     }
 
-    // #TODO: check if targetSong ends in a recognized format
-    //        else look up args[all] on ytld-core and set targetSong to first found song. 
-    //        let the user know which song botpourri found.  
-    let targetSong = args[0];
-    let connection = null; // +TODO figure out what this is
-
     serverQueue.songs.push(targetSong);
     msg.channel.send("Queued `" + targetSong + "`");
 
@@ -64,11 +65,7 @@ module.exports = {
       }
     } else if (msg.member.voice.channel != serverQueue.memberVoiceState.channel) { // user in diff VC calls bot
       return msg.channel.send("You need to be in the same voice channel as " + + " to use this command dechu.");
-    } else if (serverQueue.playing) { // something is playing; we gonna add song to queue
-      // this is ok
-    } else { // all other cases i havent encountered yet. 
-      return msg.channel.send("Error occured dechu.")
-    }
+    } // errors maybe?
 
     // // #DELETE Testing purposes
     // const connection = await msg.member.voice.channel.join().then(debugConnection => {
@@ -77,6 +74,8 @@ module.exports = {
     
     if (!serverQueue.playing) {
       play_next();
+    } else {
+      msg.channel.send("There is a song playing right now.")
     }
   }
 }
