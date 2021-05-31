@@ -17,17 +17,17 @@
 Next up <br>
 - implement single song loop  
 - implement Now Playing  
-- read google sheets cells  
+- host bot on aws  
 
 High priority (Done: 1) <br>
-- now playing function  
+- now playing function   
+- implement Now Playing  
 
-Medium priority <br>
-- hash out msg.member.voice.channel
+Medium priority (Done: 2) <br>
 - bot thinks it can "play" invalid files which are 0-second songs.  
 - sonarlint security hotspot handler, look into. 
-- ytld-core
-- host bot on aws  
+- ytld-core  
+- read google sheets cells  
 - refactor connection in play.js; it's a huge mess lol.  
 
 Low priority <br>

@@ -9,6 +9,9 @@ const fs = require('fs'); // some library
 const client = new Discord.Client();
 client.login(token);
 
+// queue
+const queue = new Map(); // queued songs for all servers
+
 // retrieves commands files 
 client.commands = new Discord.Collection();
 client.cmdAlias = new Discord.Collection();
@@ -38,12 +41,13 @@ client.once('disconnect', () => {
   console.log("Disconnect!");
 });
 
-// queue
-const queue = new Map(); // queued songs for all servers
-
-// TEST: debug
-// client.on('debug', console.log);
-
+function needArguments(userMsg, command) {
+  let reply = `${msg.author}, please provide arguments :pray:`;
+  if (command.usage) {
+    reply += `\`\`\`${prefix}${command.name} ${command.usage}\`\`\``;
+  }
+  userMsg.channel.send(reply);
+}
 
 // have bpri read messages
 client.on('message', async msg => {
@@ -60,7 +64,17 @@ client.on('message', async msg => {
       textChannel: msg.channel,
       memberVoiceState: null, // https://discord.js.org/#/docs/main/stable/class/VoiceState
       // NOTE: oh this is actually the member's voice state. 
-      songs: [],
+      songs: 
+      [
+        "https://files.catbox.moe/sb8p2m.mp3",
+        "https://files.catbox.moe/tj6gdi.mp3",
+        "https://files.catbox.moe/y68lyq.mp3",
+        "https://files.catbox.moe/900av6.mp3",
+        "https://files.catbox.moe/vbmt2r.mp3",
+        "https://files.catbox.moe/m6mwfj.mp3",
+        "https://files.catbox.moe/076xhp.mp3",
+        "https://files.catbox.moe/od5dc1.mp3"
+      ],
       playing: false,
       loop: false,
       queueLoop: false
@@ -90,11 +104,7 @@ client.on('message', async msg => {
     return msg.channel.send(reply);
   }
   if (command.args && args.length != command.args) {
-    let reply = `${msg.author}, please provide arguments :pray:`;
-    if (command.usage) {
-      reply += `\`\`\`${prefix}${command.name} ${command.usage}\`\`\``;
-    }
-    msg.channel.send(reply);
+    needArguments(msg, command);
     return;
   }
   try {

@@ -2,17 +2,11 @@ module.exports = {
   name: 'play',
   alias: 'p',
   description: 'play <song url>',
-  args: true,
+  args: false,
   requiresServerQueue: true,
   usage: "<song url>",
   execute: async function(msg, serverQueue, args) {
-
-    // #TODO: check if targetSong ends in a recognized format
-    //        else look up args[all] on ytld-core and set targetSong to first found song. 
-    //        let the user know which song botpourri found.  
-    let targetSong = args[0];
-    let connection = null; // +TODO figure out what this is
-
+    
     // a private function
     var play_next = async function() {
       if (!serverQueue.songs.length) {
@@ -48,8 +42,23 @@ module.exports = {
       });
     }
 
-    serverQueue.songs.push(targetSong);
-    msg.channel.send("Queued `" + targetSong + "`");
+    if (!args.length) {
+      if (!serverQueue.songs.length) {
+        return needArguments(msg, self.name);
+      }
+    } else { 
+      // we are adding song if args has length so therefore this. 
+
+      // #TODO: check if targetSong ends in a recognized format
+      //        else look up args[all] on ytld-core and set targetSong to first found song. 
+      //        let the user know which song botpourri found.  
+      let targetSong = args[0];
+      serverQueue.songs.push(targetSong);
+      msg.channel.send("Queued `" + targetSong + "`");
+    }
+    let connection = null; // +TODO figure out what this is
+
+    // following code is executed, not a function
 
     // Join the same voice channel of the author of the message if not currently in a channel
     if (!serverQueue.memberVoiceState) { // nothing playing / connected originally 
@@ -65,12 +74,7 @@ module.exports = {
       }
     } else if (msg.member.voice.channel != serverQueue.memberVoiceState.channel) { // user in diff VC calls bot
       return msg.channel.send("You need to be in the same voice channel as " + + " to use this command dechu.");
-    } // errors maybe?
-
-    // // #DELETE Testing purposes
-    // const connection = await msg.member.voice.channel.join().then(debugConnection => {
-    //   debugConnection.on('debug', console.log);
-    // });
+    } 
     
     if (!serverQueue.playing) {
       play_next();
