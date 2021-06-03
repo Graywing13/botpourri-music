@@ -62,19 +62,8 @@ client.on('message', async msg => {
   if (!serverQueue) {
     let queueConstruct = {
       textChannel: msg.channel,
-      memberVoiceState: null, // https://discord.js.org/#/docs/main/stable/class/VoiceState
-      // NOTE: oh this is actually the member's voice state. 
-      songs: 
-      [
-        "https://files.catbox.moe/sb8p2m.mp3",
-        "https://files.catbox.moe/tj6gdi.mp3",
-        "https://files.catbox.moe/y68lyq.mp3",
-        "https://files.catbox.moe/900av6.mp3",
-        "https://files.catbox.moe/vbmt2r.mp3",
-        "https://files.catbox.moe/m6mwfj.mp3",
-        "https://files.catbox.moe/076xhp.mp3",
-        "https://files.catbox.moe/od5dc1.mp3"
-      ],
+      connection: null,
+      songs: [],
       playing: false,
       loop: false,
       queueLoop: false

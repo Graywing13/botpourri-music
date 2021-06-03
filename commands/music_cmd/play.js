@@ -16,10 +16,10 @@ module.exports = {
       msg.channel.send("There are `" + serverQueue.songs.length + "` songs in queue.");
       const toPlay = serverQueue.songs.shift();
 
-      msg.channel.send("Up next: `" + toPlay + "`, and the connection is `" + connection + "`.");
+      msg.channel.send("Up next: `" + toPlay + "`, and the connection is `" + serverQueue.connection + "`.");
 
-      connection = await serverQueue.memberVoiceState.channel.join();
-      let dispatcher = connection.play(toPlay);
+      // connection = await serverQueue.memberVoiceState.channel.join();
+      let dispatcher = serverQueue.connection.play(toPlay);
 
       dispatcher.on('start', () => {
         msg.channel.send("Playing `" + toPlay + "`");
@@ -30,6 +30,7 @@ module.exports = {
         msg.channel.send("Done playing `" + toPlay + "`");
         if (serverQueue.loop) {
           serverQueue.songs.unshift(toPlay);
+          return;
         } else if (serverQueue.queueLoop) {
           serverQueue.songs.push(toPlay);
         }
@@ -56,24 +57,23 @@ module.exports = {
       serverQueue.songs.push(targetSong);
       msg.channel.send("Queued `" + targetSong + "`");
     }
-    let connection = null; // +TODO figure out what this is
 
     // following code is executed, not a function
 
-    // Join the same voice channel of the author of the message if not currently in a channel
-    if (!serverQueue.memberVoiceState) { // nothing playing / connected originally 
+    // Join the same voice channel of the author of the message if bot not currently in a channel
+    if (serverQueue.connection == null) { // nothing playing / connected originally 
       if (msg.member.voice.channel) {
-        serverQueue.memberVoiceState = msg.member.voice;
-        connection = await serverQueue.memberVoiceState.channel.join();
-        msg.channel.send("Joined voice channel `" + serverQueue.memberVoiceState.channel.name + "`");
+        serverQueue.connection = await msg.member.voice.channel.join();
+        serverQueue.playing = true; // spaghetti; make a np function or whatever. 
+        msg.channel.send("Joined voice channel `" + msg.guild.me.voice.channel.name + "`");
         msg.guild.me.voice.setSelfDeaf(true).then((retMsg) => {
           console.log("message from deafen: " + retMsg);
         })
       } else {
         return msg.channel.send("Please join a voice channel :3");
       }
-    } else if (msg.member.voice.channel != serverQueue.memberVoiceState.channel) { // user in diff VC calls bot
-      return msg.channel.send("You need to be in the same voice channel as " + + " to use this command dechu.");
+    } else if (msg.member.voice.channel != msg.guild.me.voice.channel) { // user in diff VC calls bot
+      return msg.channel.send("You need to be in the voice channel " + msg.guild.me.voice.channel.name + " but you are in " + msg.member.voice.channel.name);
     } 
     
     if (!serverQueue.playing) {

@@ -28,7 +28,8 @@ Medium priority (Done: 2) <br>
 - sonarlint security hotspot handler, look into. 
 - ytld-core  
 - read google sheets cells  
-- refactor connection in play.js; it's a huge mess lol.  
+- refactor connection in play.js; it's a huge mess lol. namely if the connection already exists, don't try to form a new one. 
+- be able to read JSON maybe? so I can store list_library folder in JSON and call playlists that way.  
 
 Low priority <br>
 - b.giverole is scuffed.  
@@ -36,6 +37,6 @@ Low priority <br>
 - check against bad command usage (e.g. users improperly inputting command args in discord)  
 - would be nice to mutex lock serverQueue especially in play.js  
 
-Another Project <br>
+Another Project (Done: 1) <br>
 - build song library: make a web scraper/crawler (?) that can get the catbox link right off amq as ur playing  
 - pseudo-dropdown: be able to find a list of strings that are similar to the string being typed  
