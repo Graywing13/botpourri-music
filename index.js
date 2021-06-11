@@ -4,14 +4,11 @@ const { prefix } = require('./config.json');
 const { token } = require('./gitignore.json');
 const ytdl = require('ytdl-core');
 const fs = require('fs'); // some library
-
+ 
 // create client and login using token
 const client = new Discord.Client();
 client.login(token);
-
-// queue
-const queue = new Map(); // queued songs for all servers
-
+ 
 // retrieves commands files 
 client.commands = new Discord.Collection();
 client.cmdAlias = new Discord.Collection();
@@ -27,57 +24,55 @@ for (const folder of commandFolders) {
     }
   }
 }
-
+ 
 // Basic listeners 
 client.once('ready', () => {
   console.log("Ready!");
 });
-
+ 
 client.once('reconnecting', () => {
   console.log("Reconnecting!");
 });
-
+ 
 client.once('disconnect', () => {
   console.log("Disconnect!");
 });
-
-function needArguments(userMsg, command) {
-  let reply = `${msg.author}, please provide arguments :pray:`;
-  if (command.usage) {
-    reply += `\`\`\`${prefix}${command.name} ${command.usage}\`\`\``;
-  }
-  userMsg.channel.send(reply);
-}
-
+ 
+// queue
+const queue = new Map(); // queued songs for all servers
+ 
+ 
 // have bpri read messages
 client.on('message', async msg => {
   // creates listener for message event, gets message and saves it into message obj
-
-  if (!msg.content.startsWith(prefix) || msg.author.bot) return;
+  if (msg.content.trim().substring(0, prefix.length).toLowerCase() !== prefix || msg.author.bot) return;
   
   // set up serverQueue
   // guild == server, the key of server is the queue we obtain (this bot is in multiple servers)
   let serverQueue = queue.get(msg.guild.id); 
   // -TODO big coupling here with the queueConstruct creation :blobthink:
-  if (!serverQueue) {
+  if (!serverQueue || !(serverQueue.initialized)) {
     let queueConstruct = {
       textChannel: msg.channel,
-      connection: null,
+      memberVoiceState: null, // https://discord.js.org/#/docs/main/stable/class/VoiceState
+      // NOTE: oh this is actually the member's voice state. 
       songs: [],
       playing: false,
       loop: false,
-      queueLoop: false
+      queueLoop: false,
+      initialized: true, // pretty much this is how botpourri knows to initialize the serverQueue
+      connection: null
     }
     queue.set(msg.guild.id, queueConstruct);
     serverQueue = queueConstruct;
   }
-
+ 
   // check what to execute 
   const args = msg.content.slice(prefix.length).trim().split(/ +/);
   const commandName = args.shift().toLowerCase(); // shift takes first elem and discards it
   console.log("LOG: [" + args + "]");
   console.log("LOG: " + commandName);
-
+ 
   // figure out whether user inputted valid command
   let command;
   if (client.commands.has(commandName)) {
@@ -93,7 +88,11 @@ client.on('message', async msg => {
     return msg.channel.send(reply);
   }
   if (command.args && args.length != command.args) {
-    needArguments(msg, command);
+    let reply = `${msg.author}, please provide arguments :pray: `;
+    if (command.usage) {
+      reply += `\`\`\`${prefix}${command.name} ${command.usage}\`\`\``;
+    }
+    msg.channel.send(reply);
     return;
   }
   try {
@@ -107,7 +106,7 @@ client.on('message', async msg => {
     msg.reply('i messed up dechu... that command no work');
   }
 });
-
+ 
 module.exports = {
   getClient: function() {
     return client;
