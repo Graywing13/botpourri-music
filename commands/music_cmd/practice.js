@@ -13,7 +13,7 @@ module.exports = {
       const songInfo = songs[song];
       if (songInfo.tags.some(tag => args.includes(tag))) {
         serverQueue.songs.push(songInfo);
-        msg.channel.send(`Queued ${songInfo.songName} (\`${targetSong}\`) by ${songInfo.songArtist}. This is ${songInfo.songType}${songInfo.songNumber} from \`${songInfo.animeName}\`.`);
+        msg.channel.send(`Queued ${songInfo.songName} (\`${songInfo.songURL}\`) by ${songInfo.songArtist}. This is ${songInfo.songType}${songInfo.songNumber} from \`${songInfo.animeName}\`.`);
       }
     }
     // 2. call play 

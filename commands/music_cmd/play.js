@@ -17,45 +17,50 @@ module.exports = {
     var play_next = async function() {
       if (!serverQueue.songs.length) {
         serverQueue.playing = false;
-        return msg.channel.send("There are no more queued songs.");
+        return msg.channel.send("\:bird: There are no more queued songs.");
       }
       msg.channel.send("There are `" + serverQueue.songs.length + "` songs in queue.");
       const toPlay = serverQueue.songs.shift();
+      let playURL;
       
       // deal with the case where a songInfo is passed in. 
-      if (typeof toPlay === Object && toPlay.hasOwnProperty(songURL)) {
+      console.log("toPlay type: " + (typeof toPlay));
+      console.log("has song url: " + toPlay.hasOwnProperty('songURL'));
+      if (typeof toPlay === 'object' && toPlay.hasOwnProperty('songURL')) {
         let toSend = "Up next: ";
-        if (toPlay.hasOwnProperty(songName)) {
+        if (toPlay.hasOwnProperty('songName')) {
           toSend += ` ${toPlay.songName}`;
         }
-        if (toPlay.hasOwnProperty(songURL)) {
-          toSend += ` (\`${toPlay.songURL}\`)`;
-        }
-        if (toPlay.hasOwnProperty(songArtist)) {
+        if (toPlay.hasOwnProperty('songArtist')) {
           toSend += ` by ${toPlay.songArtist}.`;
         }
-        if (toPlay.hasOwnProperty(songType) && toPlay.hasOwnProperty(songNumber)) {
+        if (toPlay.hasOwnProperty('songType') && toPlay.hasOwnProperty('songNumber')) {
           toSend += ` This is ${toPlay.songType}${toPlay.songNumber}`;
         }
-        if (toPlay.hasOwnProperty(animeName)) {
+        if (toPlay.hasOwnProperty('animeName')) {
           toSend += ` from \`${toPlay.animeName}\`.`;
         }
+        toSend += ` (\`${toPlay.songURL}\`)`;
+        playURL = toPlay.songURL;
         msg.channel.send(toSend);
+      } else if (typeof toPlay === 'string') {
+        msg.channel.send("\:musical_note: Up next: `" + toPlay + "`, and the connection is `" + connection + "`.");
+        playURL = toPlay;
       } else {
-        msg.channel.send("Up next: `" + toPlay + "`, and the connection is `" + connection + "`.");
+        console.error("no song URL detected.");
+        msg.channel.send("Error playing song: no song URL detected. Please disconnect and retry.");
+        return;
       }
  
       connection = await serverQueue.memberVoiceState.channel.join();
       serverQueue.connection = connection; // maybe i should remove this line 
-      let dispatcher = connection.play(toPlay);
+      let dispatcher = connection.play(playURL);
  
       dispatcher.on('start', () => {
-        msg.channel.send("Playing `" + toPlay + "`");
         serverQueue.playing = true;
       });
  
       dispatcher.on('finish', () => {
-        msg.channel.send("Done playing `" + toPlay + "`");
         if (serverQueue.loop) {
           serverQueue.songs.unshift(toPlay);
         } else if (serverQueue.queueLoop) {
@@ -71,7 +76,7 @@ module.exports = {
     }
  
     serverQueue.songs.push(targetSong);
-    msg.channel.send("Queued `" + targetSong + "`");
+    msg.channel.send("\:grey_exclamation: Queued `" + targetSong + "`");
  
     // Join the same voice channel of the author of the message if not currently in a channel
     if (!serverQueue.memberVoiceState) { // nothing playing / connected originally 
