@@ -1,27 +1,31 @@
 module.exports = { 
   // PURPOSE: a parser for a possibly playable object or string.
   //   returns a playable url
-  execute: function(msg, toPlay) {
+  execute: function(msg, toPlay, displaySongInfo) {
     let playURL;
 
     // deal with the case where a songInfo is passed in. 
     if (typeof toPlay === 'object' && toPlay.hasOwnProperty('songURL')) {
-      let toSend = "\:bird: Playing: ";
-      if (toPlay.hasOwnProperty('animeName')) {
-        toSend += `**${toPlay.animeName}**`;
-      }
-      if (toPlay.hasOwnProperty('songType') && toPlay.hasOwnProperty('songNumber')) {
-        toSend += ` ${toPlay.songType}${toPlay.songNumber}.`;
-      }
-      if (toPlay.hasOwnProperty('songName')) {
-        toSend += ` This is ${toPlay.songName}`;
-      }
-      if (toPlay.hasOwnProperty('songArtist')) {
-        toSend += ` by ${toPlay.songArtist}.`;
-      }
-      toSend += ` (\`${toPlay.songURL}\`)`;
       playURL = toPlay.songURL;
-      msg.channel.send(toSend);
+      if (displaySongInfo) {
+        let toSend = "\:bird: Playing: ";
+        if (toPlay.hasOwnProperty('animeName')) {
+          toSend += `**${toPlay.animeName}**`;
+        }
+        if (toPlay.hasOwnProperty('songType') && toPlay.hasOwnProperty('songNumber')) {
+          toSend += ` ${toPlay.songType}${toPlay.songNumber}.`;
+        }
+        if (toPlay.hasOwnProperty('songName')) {
+          toSend += ` This is ${toPlay.songName}`;
+        }
+        if (toPlay.hasOwnProperty('songArtist')) {
+          toSend += ` by ${toPlay.songArtist}.`;
+        }
+        toSend += ` (\`${toPlay.songURL}\`)`;
+        msg.channel.send(toSend);
+      } else {
+        msg.channel.send(":see_no_evil: Playing next song... ");
+      }
     } else if (typeof toPlay === 'string') {
       msg.channel.send("\:bird: Up next: `" + toPlay + "`.");
       playURL = toPlay;

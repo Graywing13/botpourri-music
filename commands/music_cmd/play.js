@@ -7,7 +7,7 @@ module.exports = {
   usage: "<song url>",
   execute: async function(msg, serverQueue, args) {
     const sendSongInfo = require("./tools/sendSongInfo");
-    
+
     if (args.length == 0) {
       if (serverQueue.songs.length == 0) {
         return msg.channel.send("Please put a song link to start off the queue!");
@@ -34,14 +34,19 @@ module.exports = {
       msg.channel.send("There are `" + serverQueue.songs.length + "` songs in queue.");
       
       // gets song information and sends it
-      const playURL = sendSongInfo.execute(msg, serverQueue.songs[0]);
+      const playURL = sendSongInfo.execute(msg, serverQueue.songs[0], false); // change this to true if not practicing
  
       connection = await serverQueue.memberVoiceState.channel.join();
       serverQueue.connection = connection; // maybe i should remove this line 
-      let dispatcher = connection.play(playURL);
+      // This is for regular playing
+      // let dispatcher = connection.play(playURL);
+
+      // this is for amq style playing
+      const secondsIn = Math.random() * 70;
+      let dispatcher = connection.play(playURL, {seek: secondsIn});
  
       dispatcher.on('start', () => {
-        msg.channel.send(":yellow_circle: Starting `" + playURL + "`.");
+        msg.channel.send(`:yellow_circle: Starting \`${playURL}\` at ${secondsIn.toFixed(2)}s in.`);
         serverQueue.playing = true;
       });
  

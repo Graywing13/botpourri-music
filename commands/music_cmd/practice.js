@@ -12,7 +12,7 @@ module.exports = {
     // 1. enqueue all songs with a certain tag (#TODO or omission of a certain tag)
     for (var song in songs) {
       const songInfo = songs[song];
-      if (songInfo.tags.some(tag => args.includes(tag))) {
+      if (songInfo.tags.some(tag => args.includes(tag.toLowerCase()))) {
         serverQueue.songs.push(songInfo);
         msg.channel.send(`Queued ${songInfo.songName} (\`${songInfo.songURL}\`) by ${songInfo.songArtist}. This is ${songInfo.songType}${songInfo.songNumber} from \`${songInfo.animeName}\`.`);
       }
