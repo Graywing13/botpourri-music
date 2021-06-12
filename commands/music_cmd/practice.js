@@ -1,6 +1,6 @@
 module.exports = { 
   name: 'practice',
-  alias: 'r',
+  alias: 'pr',
   description: 'practice <song tag>',
   args: true,
   requiresServerQueue: true,

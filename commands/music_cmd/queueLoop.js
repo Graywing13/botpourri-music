@@ -6,6 +6,6 @@ module.exports = {
   usage: "",
   execute: async function(msg, serverQueue, args) {
     serverQueue.queueLoop = !(serverQueue.queueLoop);
-    (serverQueue.queueLoop) ? (msg.channel.send("Queue loop turned `on`.")) : (msg.channel.send("Queue loop turned `off`."));
+    (serverQueue.queueLoop) ? (msg.channel.send(":repeat: Queue loop turned `on`.")) : (msg.channel.send(":arrow_right_hook: Queue loop turned `off`."));
   }
 }

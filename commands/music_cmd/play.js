@@ -6,6 +6,7 @@ module.exports = {
   requiresServerQueue: true,
   usage: "<song url>",
   execute: async function(msg, serverQueue, args) {
+    const sendSongInfo = require("./tools/sendSongInfo");
  
     // #TODO: check if targetSong ends in a recognized format
     //        else look up args[all] on ytld-core and set targetSong to first found song. 
@@ -20,52 +21,28 @@ module.exports = {
         return msg.channel.send("\:camping: There are no more queued songs.");
       }
       msg.channel.send("There are `" + serverQueue.songs.length + "` songs in queue.");
-      const toPlay = serverQueue.songs.shift();
-      let playURL;
       
-      // deal with the case where a songInfo is passed in. 
-      if (typeof toPlay === 'object' && toPlay.hasOwnProperty('songURL')) {
-        let toSend = "\:bird: Up next: ";
-        if (toPlay.hasOwnProperty('songName')) {
-          toSend += ` ${toPlay.songName}`;
-        }
-        if (toPlay.hasOwnProperty('songArtist')) {
-          toSend += ` by ${toPlay.songArtist}.`;
-        }
-        if (toPlay.hasOwnProperty('songType') && toPlay.hasOwnProperty('songNumber')) {
-          toSend += ` This is ${toPlay.songType}${toPlay.songNumber}`;
-        }
-        if (toPlay.hasOwnProperty('animeName')) {
-          toSend += ` from \`${toPlay.animeName}\`.`;
-        }
-        toSend += ` (\`${toPlay.songURL}\`)`;
-        playURL = toPlay.songURL;
-        msg.channel.send(toSend);
-      } else if (typeof toPlay === 'string') {
-        msg.channel.send("\:bird: Up next: `" + toPlay + "`, and the connection is `" + connection + "`.");
-        playURL = toPlay;
-      } else {
-        console.error("no song URL detected.");
-        msg.channel.send("Error playing song: no song URL detected. Please disconnect and retry.");
-        return;
-      }
+      // gets song information and sends it
+      const playURL = sendSongInfo.execute(msg, serverQueue.songs[0]);
  
       connection = await serverQueue.memberVoiceState.channel.join();
       serverQueue.connection = connection; // maybe i should remove this line 
+      console.log(playURL);
       let dispatcher = connection.play(playURL);
  
       dispatcher.on('start', () => {
-        msg.channel.send(":yellow_circle: Starting " + playURL);
+        msg.channel.send(":yellow_circle: Starting `" + playURL + "`.");
         serverQueue.playing = true;
       });
  
       dispatcher.on('finish', () => {
         msg.channel.send(":green_circle: Done `" + playURL + "` after playing for " + (dispatcher.streamTime / 1000) + "s.");
-        if (serverQueue.loop) {
-          serverQueue.songs.unshift(toPlay);
-        } else if (serverQueue.queueLoop) {
-          serverQueue.songs.push(toPlay);
-        }
+        if (!serverQueue.loop) {
+          serverQueue.songs.shift();
+          if (serverQueue.queueLoop) {
+            serverQueue.songs.push(serverQueue.songs[0]);
+          }
+        } 
         play_next();
       });
  

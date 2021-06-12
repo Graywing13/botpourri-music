@@ -7,6 +7,6 @@ module.exports = {
   usage: "<>",
   execute: async function(msg, serverQueue, args) {
     serverQueue.connection.dispatcher.resume();
-    msg.channel.send(":play_pause: Resuming.");
+    msg.channel.send(":arrow_forward: Resuming.");
   }
 }
