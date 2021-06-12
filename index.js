@@ -70,8 +70,8 @@ client.on('message', async msg => {
   // check what to execute 
   const args = msg.content.slice(prefix.length).trim().split(/ +/);
   const commandName = args.shift().toLowerCase(); // shift takes first elem and discards it
-  console.log("LOG: command name " + commandName);
-  console.log("LOG: args [" + args + "]");
+  // console.log("LOG: command name " + commandName);
+  // console.log("LOG: args [" + args + "]");
  
   // figure out whether user inputted valid command
   let command;

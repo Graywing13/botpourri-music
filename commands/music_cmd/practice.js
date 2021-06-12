@@ -18,6 +18,8 @@ module.exports = {
       }
     }
     // 2. call play 
+    const shuffleArray = require("./tools/shuffleArray");
+    shuffleArray.execute(serverQueue.songs);
     msg.channel.send(`\:grey_exclamation: All songs with tags \`${args.toString(args)}\` have been added to queue.`);
 
     // 3. if there are currently songs in queue, ask whether to clear them. 

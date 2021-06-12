@@ -36,6 +36,9 @@ module.exports = {
       // gets song information and sends it
       const playURL = sendSongInfo.execute(msg, serverQueue.songs[0], false); // change this to true if not practicing
  
+      // TODO deal with case where botpourri is in voice channel, and a user not in the voice channel calls b.play (botpourri throws following:)
+      // (node:16524) UnhandledPromiseRejectionWarning: TypeError: Cannot read property 'join' of null
+      // at play_next (c:\Users\chann\Desktop\Coding\Discord Bots\Botpourri\JS Botpourri\musicbpri\commands\music_cmd\play.js:39:63)
       connection = await serverQueue.memberVoiceState.channel.join();
       serverQueue.connection = connection; // maybe i should remove this line 
       // This is for regular playing
