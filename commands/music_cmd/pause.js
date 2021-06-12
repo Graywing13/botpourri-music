@@ -9,5 +9,6 @@ module.exports = {
     // #TODO
     console.log("pause");
     serverQueue.connection.dispatcher.pause();
+    msg.channel.send(":pause_button: Paused.");
   }
 }

@@ -17,17 +17,15 @@ module.exports = {
     var play_next = async function() {
       if (!serverQueue.songs.length) {
         serverQueue.playing = false;
-        return msg.channel.send("\:bird: There are no more queued songs.");
+        return msg.channel.send("\:camping: There are no more queued songs.");
       }
       msg.channel.send("There are `" + serverQueue.songs.length + "` songs in queue.");
       const toPlay = serverQueue.songs.shift();
       let playURL;
       
       // deal with the case where a songInfo is passed in. 
-      console.log("toPlay type: " + (typeof toPlay));
-      console.log("has song url: " + toPlay.hasOwnProperty('songURL'));
       if (typeof toPlay === 'object' && toPlay.hasOwnProperty('songURL')) {
-        let toSend = "Up next: ";
+        let toSend = "\:bird: Up next: ";
         if (toPlay.hasOwnProperty('songName')) {
           toSend += ` ${toPlay.songName}`;
         }
@@ -44,7 +42,7 @@ module.exports = {
         playURL = toPlay.songURL;
         msg.channel.send(toSend);
       } else if (typeof toPlay === 'string') {
-        msg.channel.send("\:musical_note: Up next: `" + toPlay + "`, and the connection is `" + connection + "`.");
+        msg.channel.send("\:bird: Up next: `" + toPlay + "`, and the connection is `" + connection + "`.");
         playURL = toPlay;
       } else {
         console.error("no song URL detected.");
@@ -57,10 +55,12 @@ module.exports = {
       let dispatcher = connection.play(playURL);
  
       dispatcher.on('start', () => {
+        msg.channel.send(":yellow_circle: Starting " + playURL);
         serverQueue.playing = true;
       });
  
       dispatcher.on('finish', () => {
+        msg.channel.send(":green_circle: Done `" + playURL + "` after playing for " + (dispatcher.streamTime / 1000) + "s.");
         if (serverQueue.loop) {
           serverQueue.songs.unshift(toPlay);
         } else if (serverQueue.queueLoop) {

@@ -17,6 +17,6 @@ module.exports = {
       }
     }
     // 2. call play 
-    msg.channel.send(`All songs with tags \`${args.toString(args)}\` have been added to queue.`)
+    msg.channel.send(`\:grey_exclamation: All songs with tags \`${args.toString(args)}\` have been added to queue.`)
   }
 }
