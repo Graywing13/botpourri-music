@@ -70,8 +70,8 @@ client.on('message', async msg => {
   // check what to execute 
   const args = msg.content.slice(prefix.length).trim().split(/ +/);
   const commandName = args.shift().toLowerCase(); // shift takes first elem and discards it
-  console.log("LOG: [" + args + "]");
-  console.log("LOG: " + commandName);
+  console.log("LOG: command name " + commandName);
+  console.log("LOG: args [" + args + "]");
  
   // figure out whether user inputted valid command
   let command;
@@ -87,7 +87,7 @@ client.on('message', async msg => {
     reply += "and- no more dechu..."
     return msg.channel.send(reply);
   }
-  if (command.args && args.length != command.args) {
+  if (command.args && args.length < command.args) {
     let reply = `${msg.author}, please provide arguments :pray: `;
     if (command.usage) {
       reply += `\`\`\`${prefix}${command.name} ${command.usage}\`\`\``;

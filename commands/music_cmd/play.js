@@ -27,7 +27,6 @@ module.exports = {
  
       connection = await serverQueue.memberVoiceState.channel.join();
       serverQueue.connection = connection; // maybe i should remove this line 
-      console.log(playURL);
       let dispatcher = connection.play(playURL);
  
       dispatcher.on('start', () => {

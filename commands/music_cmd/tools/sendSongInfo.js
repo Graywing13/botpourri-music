@@ -7,17 +7,17 @@ module.exports = {
     // deal with the case where a songInfo is passed in. 
     if (typeof toPlay === 'object' && toPlay.hasOwnProperty('songURL')) {
       let toSend = "\:bird: Playing: ";
+      if (toPlay.hasOwnProperty('animeName')) {
+        toSend += `**${toPlay.animeName}**`;
+      }
+      if (toPlay.hasOwnProperty('songType') && toPlay.hasOwnProperty('songNumber')) {
+        toSend += ` ${toPlay.songType}${toPlay.songNumber}.`;
+      }
       if (toPlay.hasOwnProperty('songName')) {
-        toSend += ` ${toPlay.songName}`;
+        toSend += ` This is ${toPlay.songName}`;
       }
       if (toPlay.hasOwnProperty('songArtist')) {
         toSend += ` by ${toPlay.songArtist}.`;
-      }
-      if (toPlay.hasOwnProperty('songType') && toPlay.hasOwnProperty('songNumber')) {
-        toSend += ` This is ${toPlay.songType}${toPlay.songNumber}`;
-      }
-      if (toPlay.hasOwnProperty('animeName')) {
-        toSend += ` from \`${toPlay.animeName}\`.`;
       }
       toSend += ` (\`${toPlay.songURL}\`)`;
       playURL = toPlay.songURL;
