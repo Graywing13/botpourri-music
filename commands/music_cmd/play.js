@@ -2,16 +2,27 @@ module.exports = {
   name: 'play',
   alias: 'p',
   description: 'play <song url>',
-  args: true,
+  args: 0,
   requiresServerQueue: true,
   usage: "<song url>",
   execute: async function(msg, serverQueue, args) {
     const sendSongInfo = require("./tools/sendSongInfo");
+    
+    if (args.length == 0) {
+      if (serverQueue.songs.length == 0) {
+        return msg.channel.send("Please put a song link to start off the queue!");
+      } 
+    } else {
+      // #TODO: check if targetSong ends in a recognized format
+      //        else look up args[all] on ytld-core and set targetSong to first found song. 
+      //        let the user know which song botpourri found.  
+      let targetSong = args[0];
+      serverQueue.songs.push(targetSong);
+      msg.channel.send("\:grey_exclamation: Queued `" + targetSong + "`");
+    }
+    
  
-    // #TODO: check if targetSong ends in a recognized format
-    //        else look up args[all] on ytld-core and set targetSong to first found song. 
-    //        let the user know which song botpourri found.  
-    let targetSong = args[0];
+    
     let connection = null; // +TODO figure out what this is
  
     // a private function
@@ -50,9 +61,6 @@ module.exports = {
         msg.channel.send("Error with `" + toPlay + "`");
       });
     }
- 
-    serverQueue.songs.push(targetSong);
-    msg.channel.send("\:grey_exclamation: Queued `" + targetSong + "`");
  
     // Join the same voice channel of the author of the message if not currently in a channel
     if (!serverQueue.memberVoiceState) { // nothing playing / connected originally 
