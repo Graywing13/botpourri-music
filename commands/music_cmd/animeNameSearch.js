@@ -12,9 +12,7 @@ module.exports = {
     const songs = require(songFile);
     let toSearch = "";
     // 1. get search
-    console.log(`args: ${args} with length ${args.length}`);
     for (const arg of args) {
-      console.log(`arg: ${arg}`);
       if (toSearch !== "") {
         toSearch += " ";
       }

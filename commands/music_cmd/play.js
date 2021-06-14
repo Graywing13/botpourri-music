@@ -55,12 +55,7 @@ module.exports = {
  
       dispatcher.on('finish', () => {
         msg.channel.send(":green_circle: Done `" + playURL + "` after playing for " + (dispatcher.streamTime / 1000) + "s.");
-        if (!serverQueue.loop) {
-          serverQueue.songs.shift();
-          if (serverQueue.queueLoop) {
-            serverQueue.songs.push(serverQueue.songs[0]);
-          }
-        } 
+        decideWhetherLoop(serverQueue);
         play_next();
       });
  
@@ -97,4 +92,13 @@ module.exports = {
       msg.channel.send("There is a song playing right now.")
     }
   }
+}
+
+function decideWhetherLoop(serverQueue) {
+  if (!serverQueue.loop) {
+    serverQueue.songs.shift();
+    if (serverQueue.queueLoop) {
+      serverQueue.songs.push(serverQueue.songs[0]);
+    }
+  } 
 }
