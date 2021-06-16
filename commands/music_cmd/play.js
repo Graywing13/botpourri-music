@@ -1,3 +1,5 @@
+const sendSongInfo = require("./tools/sendSongInfo");
+const getWebmLength = require("./tools/getWebmLength");
 module.exports = { 
   name: 'play',
   alias: 'p',
@@ -6,7 +8,6 @@ module.exports = {
   requiresServerQueue: true,
   usage: "<song url>",
   execute: async function(msg, serverQueue, args) {
-    const sendSongInfo = require("./tools/sendSongInfo");
 
     if (args.length == 0) {
       if (serverQueue.songs.length == 0) {
@@ -45,7 +46,12 @@ module.exports = {
       // let dispatcher = connection.play(playURL);
 
       // this is for amq style playing
-      const secondsIn = Math.random() * 70;
+      let songLength;
+      await getWebmLength.execute(playURL).then(function(duration) {
+        songLength = duration;
+        console.log(`songLength: ${songLength}`);
+      });
+      const secondsIn = Math.random() * (songLength - 20);
       let dispatcher = connection.play(playURL, {seek: secondsIn});
  
       dispatcher.on('start', () => {
@@ -71,9 +77,7 @@ module.exports = {
         serverQueue.memberVoiceState = msg.member.voice;
         connection = await serverQueue.memberVoiceState.channel.join();
         msg.channel.send("Joined voice channel `" + serverQueue.memberVoiceState.channel.name + "`");
-        msg.guild.me.voice.setSelfDeaf(true).then((retMsg) => {
-          console.log("message from deafen: " + retMsg);
-        })
+        msg.guild.me.voice.setSelfDeaf(true);
       } else {
         return msg.channel.send("Please join a voice channel :3");
       }
