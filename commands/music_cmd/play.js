@@ -51,7 +51,7 @@ module.exports = {
         songLength = duration;
         console.log(`songLength: ${songLength}`);
       });
-      const secondsIn = Math.random() * (songLength - 20);
+      const secondsIn = 0; //Math.random() * (songLength - 20);
       let dispatcher = connection.play(playURL, {seek: secondsIn});
  
       dispatcher.on('start', () => {
@@ -100,9 +100,9 @@ module.exports = {
 
 function decideWhetherLoop(serverQueue) {
   if (!serverQueue.loop) {
-    serverQueue.songs.shift();
     if (serverQueue.queueLoop) {
       serverQueue.songs.push(serverQueue.songs[0]);
     }
+    serverQueue.songs.shift();
   } 
 }
