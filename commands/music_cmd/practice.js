@@ -1,6 +1,6 @@
 const shuffleArray = require("./tools/shuffleArray");
 const queueSonginfo = require("./tools/queueSonginfo");
-const { play } = require("./play");
+const play = require("./play").execute;
 
 const msgStringMaxLen = 500;
 
@@ -10,6 +10,7 @@ module.exports = {
   description: 'practice <song tag>',
   args: true, 
   requiresServerQueue: true,
+  requiresSameCall: true,
   usage: "<tag>",
   execute: async function(msg, serverQueue, args) {
     const songFile = "C:/Users/chann/Desktop/Coding/JavaScript/AMQ Web Scrapers/gatheredData/songs/songs.json";

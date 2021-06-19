@@ -93,12 +93,24 @@ client.on('message', async msg => {
     return;
   }
   try {
+    if (command.requiresSameCall) {
+      // Join the same voice channel of the author of the message if not currently in a channel
+      if (!msg.member.voice.channel) {
+        return msg.reply("please join a voice channel :3");
+      } else if (serverQueue.connection == null) {
+        serverQueue.connection = await msg.member.voice.channel.join();
+        msg.channel.send("Joined voice channel `" + msg.guild.me.voice.channel.name + "`"); 
+        msg.guild.me.voice.setSelfDeaf(true);
+      } else if (msg.member.voice.channel != msg.guild.me.voice.channel) {
+        return msg.reply("You need to be in the same voice channel as botpourri (" + msg.guild.me.voice.channel.name + ") to use this command dechu.");
+      }
+    }
     if (command.requiresServerQueue) {
       command.execute(msg, serverQueue, args);
     } else {
       command.execute(msg, args);
     }
-    } catch (error) {
+  } catch (error) {
     console.error(error);
     msg.reply('i messed up dechu... that command no work');
   }

@@ -4,7 +4,8 @@ module.exports = {
   name: '{lowercase command name without spacees}',
   alias: '(optional) {an alias for the command name}',
   description: 'text given in the help page',
-  args: {[true / false(default)], whether arguments are mandatory for this command},
+  args: {[integer >= 0 (default)] 'whether arguments are mandatory for this command'},
+  requiresSameCall: {[true / false(default)], whether this requires the user share botpourri's voice channel},
   requiresServerQueue: {[true / false(default)], whether the server queue is required},
   usage: "(optional) {<arg_description> <arg2_description...>}",
   execute: async function(msg, args) {

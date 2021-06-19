@@ -14,6 +14,6 @@ module.exports = {
       throw new Error(`Invalid array index of \`${position}\` for a song queue of size \`${queue.length}\`. `);
     }
     queue.splice(position, 0, songInfo);
-    return `Queued ${songInfo.songName} (\`${songInfo.songURL}\`) by ${songInfo.songArtist} into position ${position}. This is ${songInfo.songType}${songInfo.songNumber} from \`${songInfo.animeName}\`.`;
+    return `Queued ${songInfo.songName} (\`${songInfo.songURL}\`) by ${songInfo.songArtist} into position ${position}. This is ${songInfo.songType}${songInfo.songNumber} from \`${songInfo.animeName}\`.\n`;
   }
 }

@@ -6,6 +6,7 @@ module.exports = {
   description: 'play <song url>',
   args: 0,
   requiresServerQueue: true,
+  requiresSameCall: true,
   usage: "<song url>",
   execute: async function(msg, serverQueue, args = 0) {
 
@@ -24,7 +25,7 @@ module.exports = {
     
  
     
-    let connection = null; // +TODO figure out what this is
+    let connection = serverQueue.connection; // +TODO figure out what this is
  
     // a private function
     var play_next = async function() {
@@ -40,12 +41,10 @@ module.exports = {
       // TODO deal with case where botpourri is in voice channel, and a user not in the voice channel calls b.play (botpourri throws following:)
       // (node:16524) UnhandledPromiseRejectionWarning: TypeError: Cannot read property 'join' of null
       // at play_next (c:\Users\chann\Desktop\Coding\Discord Bots\Botpourri\JS Botpourri\musicbpri\commands\music_cmd\play.js:39:63)
-      connection = await serverQueue.memberVoiceState.channel.join();
-      serverQueue.connection = connection; // maybe i should remove this line 
+      // connection = await serverQueue.memberVoiceState.channel.join();
+      // serverQueue.connection = connection; // maybe i should remove this line 
       // This is for regular playing
-      // let dispatcher = connection.play(playURL);
 
-      // this is for amq style playing
       let songLength;
       await getWebmLength.execute(playURL).then(function(duration) {
         songLength = duration;
@@ -70,19 +69,7 @@ module.exports = {
       });
     }
  
-    // Join the same voice channel of the author of the message if not currently in a channel
-    if (!serverQueue.memberVoiceState) { // nothing playing / connected originally 
-      if (msg.member.voice.channel) {
-        serverQueue.memberVoiceState = msg.member.voice;
-        connection = await serverQueue.memberVoiceState.channel.join();
-        msg.channel.send("Joined voice channel `" + serverQueue.memberVoiceState.channel.name + "`");
-        msg.guild.me.voice.setSelfDeaf(true);
-      } else {
-        return msg.channel.send("Please join a voice channel :3");
-      }
-    } else if (msg.member.voice.channel != serverQueue.memberVoiceState.channel) { // user in diff VC calls bot
-      return msg.channel.send("You need to be in the same voice channel as " + + " to use this command dechu.");
-    } // errors maybe?
+    
  
     // // #DELETE Testing purposes
     // const connection = await msg.member.voice.channel.join().then(debugConnection => {

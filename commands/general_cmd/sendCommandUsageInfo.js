@@ -8,6 +8,7 @@ module.exports = {
   args: 0, 
   usage: "<commandName>",
   // PURPOSE: send a message pinging the user telling them they misused the command
+  // TODO the help function (this) actually doesnt work lol. 
   execute: function(msg, commandName, optionalInfo = "") {
     console.log("LOG: (help fn) commandName " + commandName);
     console.log("LOG: (help fn) typeof commandName " + typeof commandName);
