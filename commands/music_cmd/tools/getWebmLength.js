@@ -9,8 +9,6 @@ async function getWebmLength(songURL) {
     // const { stdout, stderr } = await exec('dir');
     const { stdout, stderr } = await exec(cmd_ffprobe_duration);
     if (stderr) console.log(stderr);
-
-    console.log(`duration: ${stdout}`);
     return stdout; // song duration
   } catch (e) {
     console.error('Can\'t determine webm file duration', error);

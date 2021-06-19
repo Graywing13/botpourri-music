@@ -1,3 +1,9 @@
+const shuffleArray = require("./tools/shuffleArray");
+const queueSonginfo = require("./tools/queueSonginfo");
+const { play } = require("./play");
+
+const msgStringMaxLen = 500;
+
 module.exports = { 
   name: 'practice',
   alias: 'pr',
@@ -10,18 +16,24 @@ module.exports = {
     const songs = require(songFile);
     args = args.map(arg => arg.toLowerCase());
     // 1. enqueue all songs with a certain tag (#TODO or omission of a certain tag)
+    let msgString = "";
     for (var song in songs) {
       const songInfo = songs[song];
       if (songInfo.tags.some(tag => args.includes(tag.toLowerCase()))) {
-        serverQueue.songs.push(songInfo);
-        msg.channel.send(`Queued ${songInfo.songName} (\`${songInfo.songURL}\`) by ${songInfo.songArtist}. This is ${songInfo.songType}${songInfo.songNumber} from \`${songInfo.animeName}\`.`);
+        msgString += queueSonginfo.execute(msg, serverQueue.songs, songInfo);
+        if (msgString.length > msgStringMaxLen) {
+          msg.channel.send(msgString);
+          msgString = "";
+        }
       }
     }
     // 2. call play 
-    const shuffleArray = require("./tools/shuffleArray");
     shuffleArray.execute(serverQueue.songs);
-    msg.channel.send(`\:grey_exclamation: All songs with tags \`${args.toString(args)}\` have been added to queue.`);
+    msgString += `\:grey_exclamation: All songs with tags \`${args.toString(args)}\` have been added to queue.`;
+    msg.channel.send(msgString);
+    play(msg, serverQueue);
 
     // 3. if there are currently songs in queue, ask whether to clear them. 
+    // TODO: getUserResponse tool: use emotes
   }
 }

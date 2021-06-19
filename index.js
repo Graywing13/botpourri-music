@@ -3,7 +3,8 @@ const Discord = require('discord.js');
 const { prefix } = require('./config.json');
 const { token } = require('./gitignore/gitignore.json');
 const ytdl = require('ytdl-core');
-const fs = require('fs'); // some library
+const fs = require('fs'); // some library that lets me interact with file system
+const sendCommandUsageInfo = require('./commands/general_cmd/sendCommandUsageInfo');
  
 // create client and login using token
 const client = new Discord.Client();
@@ -88,11 +89,7 @@ client.on('message', async msg => {
     return msg.channel.send(reply);
   }
   if (command.args && args.length < command.args) {
-    let reply = `${msg.author}, please provide arguments :pray: `;
-    if (command.usage) {
-      reply += `\`\`\`${prefix}${command.name} ${command.usage}\`\`\``;
-    }
-    msg.channel.send(reply);
+    sendCommandUsageInfo.execute(msg, command, "please provide arguments :pray: ");
     return;
   }
   try {
@@ -110,5 +107,15 @@ client.on('message', async msg => {
 module.exports = {
   getClient: function() {
     return client;
+  },
+  // TODO take out the command library and store it somewhere else (i.e. simplify index.js)
+  getCommand: function(commandName) {
+    if (client.commands.has(commandName)) {
+      return client.commands.get(commandName);
+    } else if (client.cmdAlias.has(commandName)) {
+      return client.cmdAlias.get(commandName);
+    } else {
+      throw new Error(`${commandName} does not exist.`);
+    }
   }
 }

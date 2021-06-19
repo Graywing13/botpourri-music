@@ -7,7 +7,7 @@ module.exports = {
   args: 0,
   requiresServerQueue: true,
   usage: "<song url>",
-  execute: async function(msg, serverQueue, args) {
+  execute: async function(msg, serverQueue, args = 0) {
 
     if (args.length == 0) {
       if (serverQueue.songs.length == 0) {
@@ -49,7 +49,6 @@ module.exports = {
       let songLength;
       await getWebmLength.execute(playURL).then(function(duration) {
         songLength = duration;
-        console.log(`songLength: ${songLength}`);
       });
       const secondsIn = 0; //Math.random() * (songLength - 20);
       let dispatcher = connection.play(playURL, {seek: secondsIn});
