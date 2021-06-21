@@ -1,5 +1,4 @@
 const { prefix } = require('../../config.json');
-const { getCommand } = require('../../index');
 
 module.exports = { 
   name: 'help',
@@ -21,10 +20,10 @@ module.exports = {
     }
 
     try {
-      let command = getCommand(commandName);
-      msg.channel.send(`${msg.author} - ${optionalInfo}Correct usage for ${command.name} is: \n\`\`\`${prefix}${commandName} ${command.usage}\`\`\`\n${command.description}`);
+      // msg.channel.send(`${msg.author} - ${optionalInfo}Correct usage for ${command.name} is: \n\`\`\`${prefix}${commandName} ${command.usage}\`\`\`\n${command.description}`);
+      msg.channel.send("This feature is under development.")
     } catch (e) {
-      msg.channel.send(e);
+      console.log("In sendCommandUsageInfo: " + e);
     }
   }
 }

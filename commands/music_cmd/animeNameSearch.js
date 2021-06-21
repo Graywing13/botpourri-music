@@ -1,5 +1,7 @@
-const queueSonginfo = require("./tools/queueSonginfo");
-const msgStringMaxLen = 500;
+const removeFlagIfFound = require("../general_cmd/tools/flag").removeFlagIfFound;
+const play = require("../music_cmd/play").execute;
+const conditionalAddToQueue = require("./tools/queueSonginfo").conditionalAddToQueue;
+const getSearch = require("../music_cmd/tools/getSearch").execute;
 
 module.exports = { 
   name: 'animesearch',
@@ -12,45 +14,39 @@ module.exports = {
   execute: async function(msg, serverQueue, args) {
     const songFile = "C:/Users/chann/Desktop/Coding/JavaScript/AMQ Web Scrapers/gatheredData/songs/songs.json";
     const songs = require(songFile);
-    let toSearch = "";
-    let matchExact = Math.max(args.indexOf("-e"), args.indexOf("-E"));
+    const hasExactFlag = removeFlagIfFound(args, 'e');
+    const hasShuffleFlag = removeFlagIfFound(args, 's');
     // 1. get search
-    if (matchExact > -1) {
-      args.splice(matchExact, 1);
-    }
-    console.log(`arglist ${args}`)
-    for (const arg of args) {
-      if (toSearch !== "") {
-        toSearch += " ";
-      }
-      toSearch += arg;
-    }
-    toSearch = toSearch.toLowerCase();
-    console.log(`toSearch: ${toSearch}`);
-    
+    let toSearch = getSearch(args);
 
     // 2. enqueue all songs with key word(s) in name
-    // TODO extract out flag function (also in queueCurrent)
     let msgString = "";
-    for (var song in songs) {
-      const songInfo = songs[song];
-      if (matchExact > -1) {
-        if (songInfo.animeName.toLowerCase() === toSearch) {
-          msgString += queueSonginfo.execute(msg, serverQueue.songs, songInfo);
-        }
-      } else if (songInfo.animeName.search(new RegExp(toSearch, "i")) > -1) {
-        msgString += queueSonginfo.execute(msg, serverQueue.songs, songInfo);
-        if (msgString.length > msgStringMaxLen) {
-          msg.channel.send(msgString);
-          msgString = "";
+    let numAdded = 0;
+    try {
+      for (const song in songs) {
+        const songInfo = songs[song];
+        const addedSong = (hasExactFlag ? (conditionalAddToQueue(msg, songInfo.animeName.toLowerCase() === toSearch, serverQueue, songInfo, msgString)) : (conditionalAddToQueue(msg, songInfo.animeName.search(new RegExp(toSearch, "i")) > -1, serverQueue, songInfo, msgString)));
+        if (addedSong != null) {
+          numAdded += 1;
+          msgString = addedSong;
         }
       }
+      if (msgString.length) msg.channel.send(msgString);
+      msg.reply(`\:grey_exclamation: All \`${numAdded}\` songs with a show name \`${toSearch}\` have been added to queue.`);
+    } catch (e) {
+      console.log(e)
+      if (msgString.length) msg.channel.send(msgString);
+      msg.reply(`\`${numAdded}\` songs were added to the queue before the following error was encountered:\n\`\`\`${e}\`\`\``);
     }
 
     // 3. call play 
-    msgString += `\:grey_exclamation: All songs with a show name \`${toSearch}\` have been added to queue.`;
-    msg.channel.send(msgString);
+    if (hasShuffleFlag) {
+      msg.channel.send(":twisted_rightwards_arrows: shuffling queue... ");
+      shuffleArray(serverQueue.songs);
+    }
+    msg.channel.send(":arrow_forward: playing queue... ");
+    play(msg, serverQueue);
 
-    // 3. if there are currently songs in queue, ask whether to clear them. 
+    // 4. TODO if there are currently songs in queue, ask whether to clear them. 
   }
 }

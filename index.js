@@ -117,11 +117,9 @@ client.on('message', async msg => {
 });
  
 module.exports = {
-  getClient: function() {
-    return client;
-  },
   // TODO take out the command library and store it somewhere else (i.e. simplify index.js)
   getCommand: function(commandName) {
+    console.log(`command name retrieving: ${commandName}`)
     if (client.commands.has(commandName)) {
       return client.commands.get(commandName);
     } else if (client.cmdAlias.has(commandName)) {

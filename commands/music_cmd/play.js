@@ -1,5 +1,6 @@
 const sendSongInfo = require("./tools/sendSongInfo");
 const getWebmLength = require("./tools/getWebmLength");
+
 module.exports = { 
   name: 'play',
   alias: 'p',
@@ -8,7 +9,7 @@ module.exports = {
   requiresServerQueue: true,
   requiresSameCall: true,
   usage: "<song url>",
-  execute: async function(msg, serverQueue, args = 0) {
+  execute: async function(msg, serverQueue, args = []) {
 
     if (args.length == 0) {
       if (serverQueue.songs.length == 0) {
@@ -49,7 +50,7 @@ module.exports = {
       await getWebmLength.execute(playURL).then(function(duration) {
         songLength = duration;
       });
-      const secondsIn = 0; //Math.random() * (songLength - 20);
+      const secondsIn = Math.random() * (songLength - 20);
       let dispatcher = connection.play(playURL, {seek: secondsIn});
  
       dispatcher.on('start', () => {
