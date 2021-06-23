@@ -1,5 +1,7 @@
-const sendSongInfo = require("./tools/sendSongInfo");
-const getWebmLength = require("./tools/getWebmLength");
+const sendSongInfo = require("./tools/sendSongInfo").execute;
+const getWebmLength = require("./tools/getWebmLength").execute;
+const nowPlaying = require("./nowPlaying").execute;
+const getFieldIfFound = require("../general_cmd/tools/field").getFieldIfFound;
 
 module.exports = { 
   name: 'play',
@@ -10,7 +12,7 @@ module.exports = {
   requiresSameCall: true,
   usage: "<song url>",
   execute: async function(msg, serverQueue, args = []) {
-
+    const hasSamplePointField = getFieldIfFound(args, 't'); 
     if (args.length == 0) {
       if (serverQueue.songs.length == 0) {
         return msg.channel.send("Please put a song link to start off the queue!");
@@ -37,7 +39,7 @@ module.exports = {
       msg.channel.send("There are `" + serverQueue.songs.length + "` songs in queue.");
       
       // gets song information and sends it
-      const playURL = sendSongInfo.execute(msg, serverQueue.songs[0], false); // change this to true if not practicing
+      const playURL = sendSongInfo(msg, serverQueue.songs[0], false); // change this to true if not practicing
  
       // TODO deal with case where botpourri is in voice channel, and a user not in the voice channel calls b.play (botpourri throws following:)
       // (node:16524) UnhandledPromiseRejectionWarning: TypeError: Cannot read property 'join' of null
@@ -47,13 +49,15 @@ module.exports = {
       // This is for regular playing
 
       let songLength;
-      await getWebmLength.execute(playURL).then(function(duration) {
+      await getWebmLength(playURL).then(function(duration) {
         songLength = duration;
       });
+      const samplePoint = getSamplePoint(args);
       const secondsIn = Math.random() * (songLength - 20);
       let dispatcher = connection.play(playURL, {seek: secondsIn});
  
       dispatcher.on('start', () => {
+        nowPlaying(msg, serverQueue);
         msg.channel.send(`:yellow_circle: Starting \`${playURL}\` at ${secondsIn.toFixed(2)}s in.`);
         serverQueue.playing = true;
       });

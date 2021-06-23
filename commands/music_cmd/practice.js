@@ -43,7 +43,9 @@ module.exports = {
       shuffleArray(serverQueue.songs);
     }
     msg.channel.send(":arrow_forward: playing queue... ");
-    play(msg, serverQueue);
+
+    
+    play(msg, serverQueue, args);
 
     // 4. TODO if there are currently songs in queue, ask whether to clear them. 
     // TODO: getUserResponse tool: use emotes
