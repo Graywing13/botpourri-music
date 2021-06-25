@@ -14,9 +14,11 @@ module.exports = {
   execute: async function(msg, serverQueue, args) {
     const songFile = "C:/Users/chann/Desktop/Coding/JavaScript/AMQ Web Scrapers/gatheredData/songs/songs.json";
     const songs = require(songFile);
-    const hasOneFlag = removeFlagIfFound(args, 'o');
-    const hasShuffleFlag = removeFlagIfFound(args, 's');
     args = args.map(arg => arg.toLowerCase());
+    const regArgs = args.filter(arg => !arg.match(/^\-/));
+    const fArgs = args.filter(arg => arg.match(/^\-/));
+    const hasOneFlag = removeFlagIfFound(fArgs, 'o');
+    const hasShuffleFlag = removeFlagIfFound(fArgs, 's');
     
     // 1. enqueue all songs with a certain tag (#TODO or omission of a certain tag)
     let msgString = "";
@@ -24,14 +26,14 @@ module.exports = {
     try {
       for (const song in songs) {
         const songInfo = songs[song];
-        const addedSong = (hasOneFlag ? (conditionalAddToQueue(msg, args.some(tag => songInfo.tags.includes(tag.toLowerCase())), serverQueue, songInfo, msgString)) : (conditionalAddToQueue(msg, args.every(tag => songInfo.tags.includes(tag.toLowerCase())), serverQueue, songInfo, msgString)));
+        const addedSong = (hasOneFlag ? (conditionalAddToQueue(msg, regArgs.some(tag => songInfo.tags.includes(tag.toLowerCase())), serverQueue, songInfo, msgString)) : (conditionalAddToQueue(msg, regArgs.every(tag => songInfo.tags.includes(tag.toLowerCase())), serverQueue, songInfo, msgString)));
         if (addedSong != null) {
           numAdded += 1;
           msgString = addedSong;
         }
       }
       if (msgString.length) msg.channel.send(msgString);
-      msg.reply(`All \`${numAdded}\` songs with ${hasOneFlag ? "at least one of " : "all of "} the tags \`${args.toString(args)}\` have been added to queue.`);
+      msg.reply(`All \`${numAdded}\` songs with ${hasOneFlag ? "at least one of " : "all of "} the tags \`${regArgs.toString(regArgs)}\` have been added to queue.`);
     } catch (e) {
       console.log(e)
       if (msgString.length) msg.channel.send(msgString);
@@ -43,9 +45,7 @@ module.exports = {
       shuffleArray(serverQueue.songs);
     }
     msg.channel.send(":arrow_forward: playing queue... ");
-
-    
-    play(msg, serverQueue, args);
+    play(msg, serverQueue, fArgs);
 
     // 4. TODO if there are currently songs in queue, ask whether to clear them. 
     // TODO: getUserResponse tool: use emotes

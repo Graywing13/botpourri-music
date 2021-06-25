@@ -1,6 +1,8 @@
 const sendSongInfo = require("./tools/sendSongInfo").execute;
 const getWebmLength = require("./tools/getWebmLength").execute;
 const nowPlaying = require("./nowPlaying").execute;
+const resume = require("./resume").execute;
+const pause = require("./pause").execute;
 const getFieldIfFound = require("../general_cmd/tools/field").getFieldIfFound;
 
 module.exports = { 
@@ -12,11 +14,14 @@ module.exports = {
   requiresSameCall: true,
   usage: "<song url>",
   execute: async function(msg, serverQueue, args = []) {
-    const hasSamplePointField = getFieldIfFound(args, 't'); 
+    const hasSamplePointField = getFieldIfFound(args, 'p'); 
+    args = args.filter(arg => !arg.match(/^\-/));
+    console.log(args);
     if (args.length == 0) {
       if (serverQueue.songs.length == 0) {
         return msg.channel.send("Please put a song link to start off the queue!");
       } 
+      return (serverQueue.playing) ? (pause()) : (resume());
     } else {
       // #TODO: check if targetSong ends in a recognized format
       //        else look up args[all] on ytld-core and set targetSong to first found song. 
@@ -25,8 +30,6 @@ module.exports = {
       serverQueue.songs.push(targetSong);
       msg.channel.send("\:grey_exclamation: Queued `" + targetSong + "`");
     }
-    
- 
     
     let connection = serverQueue.connection; // +TODO figure out what this is
  
@@ -52,8 +55,8 @@ module.exports = {
       await getWebmLength(playURL).then(function(duration) {
         songLength = duration;
       });
-      const samplePoint = getSamplePoint(args);
-      const secondsIn = Math.random() * (songLength - 20);
+      const samplePoint = decideSamplePoint(hasSamplePointField);
+      const secondsIn = Math.random() * samplePoint * (songLength - 20);
       let dispatcher = connection.play(playURL, {seek: secondsIn});
  
       dispatcher.on('start', () => {
@@ -87,6 +90,15 @@ module.exports = {
       msg.channel.send("There is a song playing right now.")
     }
   }
+}
+
+// TODO
+function decideSamplePoint(samplePointField) {
+  console.log(`sample pt field is: ${samplePointField}`)
+  if (!samplePointField) {
+    return 0;
+  }
+  return 1;
 }
 
 function decideWhetherLoop(serverQueue) {

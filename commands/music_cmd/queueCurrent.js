@@ -21,7 +21,6 @@ module.exports = {
     }
     else if (!args.length) {
       index = serverQueue.songs.length;
-      queueSonginfo.execute(serverQueue.songs, serverQueue.songs[0], serverQueue.songs.length);
     } 
     else {
       try {

@@ -11,8 +11,7 @@ async function getWebmLength(songURL) {
     if (stderr) console.log(stderr);
     return stdout; // song duration
   } catch (e) {
-    console.error('Can\'t determine webm file duration', error);
-    console.error(e);
+    console.log('Can\'t determine webm file duration: ', e);
   }
 }
 

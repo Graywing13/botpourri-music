@@ -6,8 +6,7 @@ module.exports = {
   requiresServerQueue: true,
   usage: "<>",
   execute: async function(msg, serverQueue, args) {
-    // #TODO
-    console.log("pause");
+    serverQueue.playing = false;
     serverQueue.connection.dispatcher.pause();
     msg.channel.send(":pause_button: Paused.");
   }

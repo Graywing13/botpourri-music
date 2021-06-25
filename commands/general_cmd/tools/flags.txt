@@ -1,0 +1,8 @@
+song playing
+-p (field): sample Point
+-s (flag): 
+-r (flag): insert in random position 
+-t (field): song Type selector
+
+search queries 
+-e (flag): match Exact
