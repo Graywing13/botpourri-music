@@ -1,5 +1,5 @@
 // TODO test this later. 
-const maxSongs = 50;
+const maxSongs = 100;
 const msgStringMaxLen = 500;
 
 // THROWS: Errors regarding position. 

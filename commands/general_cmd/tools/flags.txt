@@ -1,5 +1,5 @@
 song playing
--p (field): sample Point
+-p (field): sample Point. input integer between 0 and 100 repreenting percentage. 0.3 means song starts from 0% to 30%
 -s (flag): 
 -r (flag): insert in random position 
 -t (field): song Type selector

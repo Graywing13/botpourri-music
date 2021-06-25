@@ -15,28 +15,23 @@
 
 ## TODO list:
 Next up <br>
-- implement single song loop  
-- implement Now Playing  
 - host bot on aws  
 
-High priority (Done: 1) <br>
-- now playing function   
-- implement Now Playing  
+High priority (Done: 3) <br>
+- factor tags out to personal profile
 
-Medium priority (Done: 2) <br>
+Medium priority (Done: 4) <br>
+- add a regex and feature for specifying both start and stop sample point
+- finish sendCommandUsageInfo
+- mutex for the tag songs; acquire mutex and try to write to songs.js
 - bot thinks it can "play" invalid files which are 0-second songs.  
-- sonarlint security hotspot handler, look into. 
-- ytld-core  
-- read google sheets cells  
-- refactor connection in play.js; it's a huge mess lol. namely if the connection already exists, don't try to form a new one. 
-- be able to read JSON maybe? so I can store list_library folder in JSON and call playlists that way.  
 
-Low priority <br>
+Low priority (Done: 1) <br>
 - b.giverole is scuffed.  
 - bot automatic help page & command descriptions  
-- check against bad command usage (e.g. users improperly inputting command args in discord)  
 - would be nice to mutex lock serverQueue especially in play.js  
+- ytld-core  
 
-Another Project (Done: 1) <br>
-- build song library: make a web scraper/crawler (?) that can get the catbox link right off amq as ur playing  
+Another Project (Done: 2) <br>
 - pseudo-dropdown: be able to find a list of strings that are similar to the string being typed  
+- read google sheets cells  

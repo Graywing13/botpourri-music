@@ -14,10 +14,12 @@ module.exports = {
   execute: async function(msg, serverQueue, args) {
     const songFile = "C:/Users/chann/Desktop/Coding/JavaScript/AMQ Web Scrapers/gatheredData/songs/songs.json";
     const songs = require(songFile);
-    const hasExactFlag = removeFlagIfFound(args, 'e');
-    const hasShuffleFlag = removeFlagIfFound(args, 's');
+    const regArgs = args.filter(arg => !arg.match(/^\-/));
+    const fArgs = args.filter(arg => arg.match(/^\-/));
+    const hasExactFlag = removeFlagIfFound(fArgs, 'e');
+    const hasShuffleFlag = removeFlagIfFound(fArgs, 's');
     // 1. get search
-    let toSearch = getSearch(args);
+    let toSearch = getSearch(regArgs);
 
     // 2. enqueue all songs with key word(s) in name
     let msgString = "";
@@ -45,7 +47,7 @@ module.exports = {
       shuffleArray(serverQueue.songs);
     }
     msg.channel.send(":arrow_forward: playing queue... ");
-    play(msg, serverQueue);
+    play(msg, serverQueue, fArgs);
 
     // 4. TODO if there are currently songs in queue, ask whether to clear them. 
   }
