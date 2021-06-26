@@ -61,7 +61,7 @@ module.exports = {
       let dispatcher = connection.play(playURL, {seek: secondsIn});
  
       dispatcher.on('start', () => {
-        sendSongInfo.execute(msg, serverQueue.songs[0], true);
+        sendSongInfo(msg, serverQueue.songs[0], true);
         msg.channel.send(`:yellow_circle: Starting \`${playURL}\` at ${secondsIn.toFixed(2)}s in.`);
         serverQueue.playing = true;
       });
@@ -107,7 +107,6 @@ function decideSamplePoint(samplePointField, msg) {
     if (samplePoint < 0) {
       return msg.reply("Please input larger: float from 0 to 1.");
     }
-    msg.reply("Alright, sample point set. ");
     return samplePoint;
   } catch (e) {
     console.log(e);
