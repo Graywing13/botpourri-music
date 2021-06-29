@@ -50,5 +50,7 @@ module.exports = {
     play(msg, serverQueue, fArgs);
 
     // 4. TODO if there are currently songs in queue, ask whether to clear them. 
+    // hello
+    
   }
 }
