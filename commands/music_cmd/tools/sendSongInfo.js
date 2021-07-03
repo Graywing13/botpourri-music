@@ -4,6 +4,8 @@ module.exports = {
   execute: function(msg, toPlay, displaySongInfo) {
     let playURL;
 
+    // TODO factor out this part of send song info without the sendURL. 
+
     // deal with the case where a songInfo is passed in. 
     if (typeof toPlay === 'object' && toPlay.hasOwnProperty('songURL')) {
       playURL = toPlay.songURL;

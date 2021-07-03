@@ -1,4 +1,4 @@
-const tagSong = require("../../../../../../JavaScript/AMQ Web Scrapers/managementScripts/tagSongs");
+const tagSingular = require("../../../../../../JavaScript/AMQ Web Scrapers/managementScripts/tagSongs").tagSingular;
 
 module.exports = { 
   name: 'tag',
@@ -8,7 +8,8 @@ module.exports = {
   requiresServerQueue: true,
   usage: "",
   execute(msg, serverQueue, args) {
-    tagSong.execute(args[0], serverQueue.songs[0].personalSongID);
-    msg.channel.send("Should be good. a message from tagSong.js.")
+    const songInfo = serverQueue.songs[0];
+    tagSingular(args[0], songInfo.personalSongID.toString());
+    msg.reply(`successfully tagged **${songInfo.animeName}** ${songInfo.songType}${songInfo.songNumber} (${songInfo.songName}) with the tag \`${args[0]}\`.`);
   }
 }

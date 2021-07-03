@@ -15,6 +15,7 @@
 
 ## TODO list:
 Next up <br>
+- in sendSongInfo, factor out the send song info part. 
 - host bot on aws  
 
 High priority (Done: 3) <br>
