@@ -27,6 +27,7 @@ Medium priority (Done: 4) <br>
 - bot thinks it can "play" invalid files which are 0-second songs.  
 
 Low priority (Done: 1) <br>
+- check whether i can access internal files from an external source (thats bad)
 - b.giverole is scuffed.  
 - bot automatic help page & command descriptions  
 - would be nice to mutex lock serverQueue especially in play.js  

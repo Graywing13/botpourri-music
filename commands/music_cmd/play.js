@@ -15,6 +15,7 @@ module.exports = {
   usage: "<song url>",
   execute: async function(msg, serverQueue, args = []) {
     const hasSamplePointField = getFieldIfFound(args, 'p'); 
+    const hasNowPlayingField = getFieldIfFound(args, 'np');
     args = args.filter(arg => !arg.match(/^\-/));
     if (args.length == 0) {
       if (serverQueue.songs.length == 0) {
@@ -61,7 +62,7 @@ module.exports = {
       let dispatcher = connection.play(playURL, {seek: secondsIn});
  
       dispatcher.on('start', () => {
-        sendSongInfo(msg, serverQueue.songs[0], true);
+        if (hasNowPlayingField) sendSongInfo(msg, serverQueue.songs[0], true);
         msg.channel.send(`:yellow_circle: Starting \`${playURL}\` at ${secondsIn.toFixed(2)}s in.`);
         serverQueue.playing = true;
       });
@@ -74,7 +75,8 @@ module.exports = {
  
       // handle errors!
       dispatcher.on('error', () => {
-        msg.channel.send("Error with `" + toPlay + "`");
+        msg.channel.send("Error with `" + playURL + "`");
+        console.log(error);
       });
     }
  
@@ -95,7 +97,6 @@ module.exports = {
 
 // TODO take out msg as a param, instead send the user the error message with sendCommandUsageInfo
 function decideSamplePoint(samplePointField, msg) {
-  console.log(`sample pt field is: ${samplePointField}`)
   if (!samplePointField) {
     return 0;
   }

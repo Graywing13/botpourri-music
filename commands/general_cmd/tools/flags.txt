@@ -3,6 +3,7 @@ song playing
 -s (flag): 
 -r (flag): insert in random position 
 -t (field): song Type selector
+-np (flag): when song starts, say what song is currently playing. 
 
 search queries 
 -e (flag): match Exact
