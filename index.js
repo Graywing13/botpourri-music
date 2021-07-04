@@ -102,7 +102,7 @@ client.on('message', async msg => {
         msg.channel.send("Joined voice channel `" + msg.guild.me.voice.channel.name + "`"); 
         msg.guild.me.voice.setSelfDeaf(true);
       } else if (msg.member.voice.channel != msg.guild.me.voice.channel) {
-        return msg.reply("You need to be in the same voice channel as botpourri (" + msg.guild.me.voice.channel.name + ") to use this command dechu.");
+        return msg.reply("You need to be in the same voice channel as botpourri (\`" + msg.guild.me.voice.channel.name + "\`) to use this command dechu.");
       }
     }
     if (command.requiresServerQueue) {

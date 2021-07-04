@@ -2,7 +2,7 @@ module.exports = {
   // PURPOSE: a parser for a possibly playable object or string.
   //   returns a playable url
   getSongInfo: function(songInfo) {
-    let ret = "\:bird: Playing: ";
+    let ret = "";
     if (songInfo.hasOwnProperty('animeName')) {
       ret += `**${songInfo.animeName}**`;
     }
@@ -20,6 +20,7 @@ module.exports = {
   },
   execute: function(msg, toPlay, displaySongInfo) {
     let playURL;
+    let msgString = ":bird: Up next: ";
 
     // TODO factor out this part of send song info without the sendURL. 
 
@@ -27,12 +28,10 @@ module.exports = {
     if (typeof toPlay === 'object' && toPlay.hasOwnProperty('songURL')) {
       playURL = toPlay.songURL;
       if (displaySongInfo) {
-        msg.channel.send(module.exports.getSongInfo(toPlay));
-      } else {
-        msg.channel.send(":see_no_evil: Playing next song... ");
-      }
+        msgString += module.exports.getSongInfo(toPlay);
+      } 
     } else if (typeof toPlay === 'string') {
-      msg.channel.send("\:bird: Up next: `" + toPlay + "`.");
+      msgString += "\`" + toPlay + "`.";
       playURL = toPlay;
     } else {
       console.error("no song URL detected.");
@@ -40,6 +39,11 @@ module.exports = {
       throw new Error("No Song URL sent to sendSongInfo.js");
     }
 
+    if (displaySongInfo) {
+      msg.channel.send(msgString);
+    } else {
+      msg.channel.send(":see_no_evil: Playing next song... ");
+    }
     return playURL;
   }
 }
