@@ -4,7 +4,8 @@
   "description": "personal music bot to help AMQ learning",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "export NODE_PATH = musicbpri/../node_modules"
   },
   "author": "ss13",
   "license": "ISC",

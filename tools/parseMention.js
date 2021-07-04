@@ -1,6 +1,8 @@
+// TODO what on earth is this
 module.exports = {
   getUserFromMention: function(msg, mention) {
-    if (!mention) throw "`mention` is blank."; // TODO try/catch, if not a mention throw error 
+    if (!mention) throw "`mention` is blank."; 
+    // TODO try/catch, if not a mention throw error 
   
     if (mention.startsWith('<@') && mention.endsWith('>')) {
       mention = mention.slice(2, -1);

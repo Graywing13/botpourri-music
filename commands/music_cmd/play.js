@@ -1,9 +1,9 @@
 const sendSongInfo = require("./tools/sendSongInfo").execute;
 const getWebmLength = require("./tools/getWebmLength").execute;
-const nowPlaying = require("./nowPlaying").execute;
 const resume = require("./resume").execute;
 const pause = require("./pause").execute;
 const getFieldIfFound = require("../general_cmd/tools/field").getFieldIfFound;
+const removeFlagIfFound = require("../general_cmd/tools/flag").removeFlagIfFound;
 
 module.exports = { 
   name: 'play',
@@ -15,7 +15,7 @@ module.exports = {
   usage: "<song url>",
   execute: async function(msg, serverQueue, args = []) {
     const hasSamplePointField = getFieldIfFound(args, 'p'); 
-    const hasNowPlayingField = getFieldIfFound(args, 'np');
+    const hasNowPlayingFlag = removeFlagIfFound(args, 'np');
     args = args.filter(arg => !arg.match(/^\-/));
     if (args.length == 0) {
       if (serverQueue.songs.length == 0) {
@@ -62,7 +62,7 @@ module.exports = {
       let dispatcher = connection.play(playURL, {seek: secondsIn});
  
       dispatcher.on('start', () => {
-        if (hasNowPlayingField) sendSongInfo(msg, serverQueue.songs[0], true);
+        if (hasNowPlayingFlag) { sendSongInfo(msg, serverQueue.songs[0], true); } 
         msg.channel.send(`:yellow_circle: Starting \`${playURL}\` at ${secondsIn.toFixed(2)}s in.`);
         serverQueue.playing = true;
       });

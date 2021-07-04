@@ -19,6 +19,11 @@ module.exports = {
     const fArgs = args.filter(arg => arg.match(/^\-/));
     const hasOneFlag = removeFlagIfFound(fArgs, 'o');
     const hasShuffleFlag = removeFlagIfFound(fArgs, 's');
+
+    
+
+    // 4. TODO if there are currently songs in queue, ask whether to clear them. 
+    // TODO: getUserResponse tool: use emotes
     
     // 1. enqueue all songs with a certain tag (#TODO or omission of a certain tag)
     let msgString = "";
@@ -46,8 +51,5 @@ module.exports = {
     }
     msg.channel.send(":arrow_forward: playing queue... ");
     play(msg, serverQueue, fArgs);
-
-    // 4. TODO if there are currently songs in queue, ask whether to clear them. 
-    // TODO: getUserResponse tool: use emotes
   }
 }

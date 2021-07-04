@@ -15,7 +15,9 @@
 
 ## TODO list:
 Next up <br>
-- in sendSongInfo, factor out the send song info part. 
+- make bot be able to pick range of song difficulty
+- migrate all tags to personal 
+- figure out how i want to store the "luministhecat" "xanathar" etc tags. 
 - host bot on aws  
 
 High priority (Done: 3) <br>

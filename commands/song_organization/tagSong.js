@@ -1,4 +1,5 @@
 const tagSingular = require("../../../../../../JavaScript/AMQ Web Scrapers/managementScripts/tagSongs").tagSingular;
+const getSongInfo = require("../music_cmd/tools/sendSongInfo").getSongInfo;
 
 module.exports = { 
   name: 'tag',
@@ -10,6 +11,6 @@ module.exports = {
   execute(msg, serverQueue, args) {
     const songInfo = serverQueue.songs[0];
     tagSingular(args[0], songInfo.personalSongID.toString());
-    msg.reply(`successfully tagged **${songInfo.animeName}** ${songInfo.songType}${songInfo.songNumber} (${songInfo.songName}) with the tag \`${args[0]}\`.`);
+    msg.reply(`successfully tagged ${getSongInfo(songInfo)}`);
   }
 }
