@@ -1,9 +1,8 @@
-// TODO test this later. 
 const maxSongs = 100;
 const msgStringMaxLen = 500;
 
-// THROWS: Errors regarding position. 
 // PURPOSE: enqueues a song in the right position and sends a string saying what was queued and where. 
+// THROWS: Errors regarding invalid array position or array length reached. 
 module.exports = {
   execute: function(queue, songInfo, position = queue.length) {
     if (queue.length >= maxSongs) {
@@ -16,15 +15,14 @@ module.exports = {
     queue.splice(position, 0, songInfo);
     return `:notes: ${songInfo.songType}${songInfo.songNumber} from \`${songInfo.animeName}\`. This is "${songInfo.songName}" (\`${songInfo.songURL}\`) by ${songInfo.songArtist}.\n`;
   },
-  conditionalAddToQueue: function(msg, shouldAdd, serverQueue, songInfo, msgString) {
-    if (shouldAdd) {
-      msgString += module.exports.execute(serverQueue.songs, songInfo);
+  // PURPOSE: adds the given song to queue and modifies/sends the success message. 
+  // THROWS: passes on modules.exports.execute's max queue length error
+  addToQueue: function(msg, serverQueue, songInfo, msgString) {
+    msgString += module.exports.execute(serverQueue.songs, songInfo);
       if (msgString.length > msgStringMaxLen) {
         msg.channel.send(msgString);
         msgString = "";
       }
       return msgString;
-    }
-    return null;
   }
 }

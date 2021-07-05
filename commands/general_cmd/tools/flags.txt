@@ -6,6 +6,7 @@ song playing
 -np (flag): when song starts, say what song is currently playing. 
 -d (field): difficulty, from 0 to 100. 
 -o (flag): to match only one of the listed params (instead of all params)
+-n (flag): temporary omission. 
 
 search queries 
 -e (flag): match Exact
