@@ -61,7 +61,7 @@ module.exports = {
       });
       // send any residue text still in msgString
       if (msgString.length) msg.channel.send(msgString);
-      msg.reply(`All \`${numAdded}\` songs ${hasNegationFlag ? "with" : "without"} ${hasOneFlag ? "at least one of" : "all of"} the tags \`${regArgs.toString(regArgs)}\` have been added to queue.`);
+      msg.reply(`All \`${numAdded}\` songs ${hasNegationFlag ? "without" : "with"} ${hasOneFlag ? "at least one of" : "all of"} the tags \`${regArgs.toString(regArgs)}\` have been added to queue.`);
     } catch (e) {
       console.log(e)
       if (msgString.length) msg.channel.send(msgString);

@@ -24,5 +24,9 @@ module.exports = {
         msgString = "";
       }
       return msgString;
+  },
+  // PURPOSE: well i should get rid of this function but it adds a song to the queue conditionally. 
+  conditionalAddToQueue: function(msg, shouldAdd, serverQueue, songInfo, msgString) {
+    if (shouldAdd) return module.exports.addToQueue(msg, serverQueue, songInfo, msgString);
   }
 }
