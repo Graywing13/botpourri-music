@@ -9,6 +9,10 @@ module.exports = {
   requiresServerQueue: true,
   usage: "",
   execute(msg, serverQueue, args) {
+    // TODO test this if loop. 
+    if (serverQueue.songs[0] === undefined) {
+      msg.reply("Please add a song to the queue first!");
+    }
     const songInfo = serverQueue.songs[0];
     tagSingular(args[0], songInfo.personalSongID.toString());
     msg.reply(`successfully tagged ${getSongInfo(songInfo)}`);

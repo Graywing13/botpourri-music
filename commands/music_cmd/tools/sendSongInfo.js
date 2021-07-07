@@ -13,7 +13,7 @@ module.exports = {
       ret += ` (${songInfo.songName}`;
     }
     if (songInfo.hasOwnProperty('songArtist')) {
-      ret += ` by ${songInfo.songArtist}.`;
+      ret += ` by ${songInfo.songArtist},`;
     }
     ret += ` \`${songInfo.songURL}\`).`;
     return ret;

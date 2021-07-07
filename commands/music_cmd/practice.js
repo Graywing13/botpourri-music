@@ -1,12 +1,10 @@
-// TODO move songfile to inside musicbpri
-const songFile = "C:/Users/chann/Desktop/Coding/JavaScript/AMQ Web Scrapers/gatheredData/songs/songs.json";
-
-const shuffleArray = require("./tools/shuffleArray").execute;
+// TODO move songfile to inside musicbpriconst shuffleArray = require("./tools/shuffleArray").execute;
 const play = require("./play").execute;
 const removeFlagIfFound = require("../general_cmd/tools/flag").removeFlagIfFound;
 const getFieldIfFound = require("../general_cmd/tools/field").getFieldIfFound;
 const parseFieldRange = require("../general_cmd/tools/field").parseFieldRange;
 const addToQueue = require("./tools/queueSonginfo").addToQueue;
+const getSongs = require("./tools/getSongs").execute;
 
 module.exports = { 
   name: 'practice',
@@ -17,7 +15,8 @@ module.exports = {
   requiresSameCall: true,
   usage: "<tag>",
   execute: async function(msg, serverQueue, args) {
-    const songs = require(songFile);
+    const songs = getSongs();
+    
     args = args.map(arg => arg.toLowerCase());
     const regArgs = args.filter(arg => !arg.match(/^\-/));
     const fArgs = args.filter(arg => arg.match(/^\-/));

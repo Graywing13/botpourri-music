@@ -2,6 +2,9 @@ const removeFlagIfFound = require("../general_cmd/tools/flag").removeFlagIfFound
 const play = require("../music_cmd/play").execute;
 const conditionalAddToQueue = require("./tools/queueSonginfo").conditionalAddToQueue;
 const getSearch = require("../music_cmd/tools/getSearch").execute;
+const shuffleArray = require("./tools/shuffleArray").execute;
+const getSongs = require("./tools/getSongs").execute;
+
 
 module.exports = { 
   name: 'animesearch',
@@ -12,8 +15,7 @@ module.exports = {
   requiresServerQueue: true,
   usage: "",
   execute: async function(msg, serverQueue, args) {
-    const songFile = "C:/Users/chann/Desktop/Coding/JavaScript/AMQ Web Scrapers/gatheredData/songs/songs.json";
-    const songs = require(songFile);
+    const songs = getSongs();
     const regArgs = args.filter(arg => !arg.match(/^\-/));
     const fArgs = args.filter(arg => arg.match(/^\-/));
     const hasExactFlag = removeFlagIfFound(fArgs, 'e');
