@@ -13,6 +13,8 @@ module.exports = {
     serverQueue.memberVoiceState = null;
     serverQueue.initialized = false;
     serverQueue.connection = null;
+    
+    if (msg.guild.me.voice.channel == null) return msg.channel.send("I am not in a voice channel :upside_down:");
  
     await msg.guild.me.voice.channel.leave();
     

@@ -27,7 +27,6 @@ module.exports = {
           unsuccessfulUntag.push(tag);
         }
       });
-      console.log("someSuccessful is " + someSuccessful)
       return someSuccessful;
     }
 
@@ -67,7 +66,6 @@ function askTags(msg, songInfo) {
 
 // PURPOSE: 
 function turnIndexToTag(tags, requestMessage) {
-  console.log("reqmsg: ===============\n" + requestMessage + "\n==============")
   let ret = [];
   requestMessage.content.replace(/\s/,'').split(",").forEach(tagIndex => {
     try {
