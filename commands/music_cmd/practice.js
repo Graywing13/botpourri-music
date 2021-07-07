@@ -1,4 +1,5 @@
-// TODO move songfile to inside musicbpriconst shuffleArray = require("./tools/shuffleArray").execute;
+// TODO move songfile to inside musicbpri
+const shuffleArray = require("./tools/shuffleArray").execute;
 const play = require("./play").execute;
 const removeFlagIfFound = require("../general_cmd/tools/flag").removeFlagIfFound;
 const getFieldIfFound = require("../general_cmd/tools/field").getFieldIfFound;
