@@ -40,13 +40,9 @@ module.exports = {
         time: 30000,
         errors: ['time']
       }).then(collected => {
-        console.log(`Message received: ${collected}`)
-        var keys = Object.keys(collected);
-        console.log("keys: " + keys);
-        keys.forEach(key=>{
-          console.log(key + '|' + collected[key] + "\n");
-        });
-        let toUntag = turnIndexToTag(collected);
+        console.log(collected);
+        let m = collected.first();
+        let toUntag = turnIndexToTag(songInfo.tags, m);
         attemptUntag(toUntag);
         sendUntagResults(msg, songInfo, successfulUntag, unsuccessfulUntag);
       }).catch(collected => {
@@ -70,14 +66,15 @@ function askTags(msg, songInfo) {
 }
 
 // PURPOSE: 
-function turnIndexToTag(requestMessage) {
-  console.log("reqmsg: " + requestMessage)
+function turnIndexToTag(tags, requestMessage) {
+  console.log("reqmsg: ===============\n" + requestMessage + "\n==============")
   let ret = [];
-  requestMessage.replace(/\s/,'').split(",").forEach(tagIndex => {
+  requestMessage.content.replace(/\s/,'').split(",").forEach(tagIndex => {
     try {
-      ret.push(tags[tagIndex]);
+      ret.push(tags[parseInt(tagIndex) - 1]);
     } catch (e) {
       requestMessage.channel.send(`Error grabbing index ${tagIndex}`);
+      console.log(e)
     }
   });
   return ret;
@@ -94,7 +91,7 @@ function sendUntagResults(msg, songInfo, successfulUntag, unsuccessfulUntag) {
   }
   if (unsuccessfulUntag.length > 0) {
     ret += "\nError in removing the following tags: ";
-    unsuccessfulUntag.forEach(tag => ret += `\`${tag}\' `);
+    unsuccessfulUntag.forEach(tag => ret += `\`${tag}\` `);
   } else {
     ret += "\nUntagging complete. "
   }

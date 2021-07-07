@@ -1,4 +1,5 @@
 const sendSongInfo = require("./tools/sendSongInfo").execute;
+const getSongInfo = require("./tools/sendSongInfo").getSongInfo;
 const getWebmLength = require("./tools/getWebmLength").execute;
 const resume = require("./resume").execute;
 const pause = require("./pause").execute;
@@ -16,10 +17,16 @@ module.exports = {
   execute: async function(msg, serverQueue, args = []) {
     const hasSamplePointField = getFieldIfFound(args, 'p'); 
     const hasNowPlayingFlag = removeFlagIfFound(args, 'np');
+    const hasSendVerboseMsgFlag = removeFlagIfFound(args, 'v');
     args = args.filter(arg => !arg.match(/^\-/));
+
+    var verbose = function(content) {
+      if (hasSendVerboseMsgFlag) msg.channel.send(content);
+    }
+
     if (args.length == 0) {
       if (serverQueue.songs.length == 0) {
-        return msg.channel.send("Please put a song link to start off the queue!");
+        return msg.reply("Please put a song link to start off the queue!");
       } 
       if (msg.content.match(new RegExp('^b.\s*p(lay)?\s*$', 'i')) != null) {
         return (serverQueue.playing) ? (pause(msg, serverQueue)) : (resume(msg, serverQueue));
@@ -30,7 +37,7 @@ module.exports = {
       //        let the user know which song botpourri found.  
       let targetSong = args[0];
       serverQueue.songs.push(targetSong);
-      msg.channel.send("\:grey_exclamation: Queued `" + targetSong + "`");
+      verbose("\:grey_exclamation: Queued `" + targetSong + "`");
     }
     
     let connection = serverQueue.connection; // +TODO figure out what this is
@@ -41,10 +48,10 @@ module.exports = {
         serverQueue.playing = false;
         return msg.channel.send("\:camping: There are no more queued songs.");
       }
-      msg.channel.send("There are `" + serverQueue.songs.length + "` songs in queue.");
+      verbose("There are `" + serverQueue.songs.length + "` songs in queue.");
       
       // gets song information and sends it
-      const playURL = sendSongInfo(msg, serverQueue.songs[0], false); // change this to true if not practicing
+      const playURL = sendSongInfo(msg, serverQueue.songs[0], hasNowPlayingFlag); 
 
       let songLength;
       await getWebmLength(playURL).then(function(duration) {
@@ -54,14 +61,14 @@ module.exports = {
       const secondsIn = Math.random() * samplePoint * (songLength - 20);
       let dispatcher = connection.play(playURL, {seek: secondsIn});
  
+      // TODO delet the seenoevil monkey which gets called in sendSongInfo line 45 ish. 
       dispatcher.on('start', () => {
-        if (hasNowPlayingFlag) { sendSongInfo(msg, serverQueue.songs[0], true); } 
-        msg.channel.send(`:yellow_circle: Starting \`${playURL}\` at ${secondsIn.toFixed(2)}s in.`);
+        verbose(`:yellow_circle: Starting \`${playURL}\` at ${secondsIn.toFixed(2)}s in.`);
         serverQueue.playing = true;
       });
  
       dispatcher.on('finish', () => {
-        msg.channel.send(":green_circle: Done `" + playURL + "` after playing for " + (dispatcher.streamTime / 1000) + "s.");
+        verbose(":green_circle: Done `" + playURL + "` after playing for " + (dispatcher.streamTime / 1000) + "s.");
         decideWhetherLoop(serverQueue);
         play_next();
       });
