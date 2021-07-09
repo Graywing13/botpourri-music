@@ -1,3 +1,5 @@
+"use strict";
+
 const removeFlagIfFound = require("../general_cmd/tools/flag").removeFlagIfFound;
 const play = require("../music_cmd/play").execute;
 const conditionalAddToQueue = require("./tools/queueSonginfo").conditionalAddToQueue;

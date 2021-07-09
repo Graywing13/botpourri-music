@@ -1,3 +1,5 @@
+"use strict";
+
 module.exports = { 
   // PURPOSE: a parser for a possibly playable object or string.
   //   returns a playable url

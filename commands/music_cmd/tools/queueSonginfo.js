@@ -1,5 +1,7 @@
+"use strict";
+
 const maxSongs = 100;
-const msgStringMaxLen = 500;
+const msgStringMaxLen = 1000;
 
 // PURPOSE: enqueues a song in the right position and sends a string saying what was queued and where. 
 // THROWS: Errors regarding invalid array position or array length reached. 

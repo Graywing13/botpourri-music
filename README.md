@@ -15,7 +15,8 @@
 
 ## TODO list:
 Next up <br>
-- make bot be able to pick range of song difficulty
+- stop json from caching; look into autoversioning and cache deletion
+  - https://stackoverflow.com/questions/15041603/how-to-prevent-the-browser-from-caching-a-json-file
 - migrate all tags to personal 
 - figure out how i want to store the "luministhecat" "xanathar" etc tags. 
 - host bot on aws  

@@ -1,3 +1,5 @@
+"use strict";
+
 const tagSingular = require("../../../../../../JavaScript/AMQ Web Scrapers/managementScripts/tagSongs").tagSingular;
 const getSongInfo = require("../music_cmd/tools/sendSongInfo").getSongInfo;
 

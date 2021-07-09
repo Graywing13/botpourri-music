@@ -1,3 +1,5 @@
+"use strict";
+
 module.exports = {
   // PURPOSE: check whether the args
   // MODIFIES: args (only if args has that flag)

@@ -1,3 +1,5 @@
+"use strict";
+
 const getUserFromMention = require('../../tools/parseMention.js').getUserFromMention;
 module.exports = { 
   name: 'giverole',

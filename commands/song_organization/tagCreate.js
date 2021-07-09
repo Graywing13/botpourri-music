@@ -1,3 +1,5 @@
+"use strict";
+
 const sendCommandUsageInfo = require("../general_cmd/sendCommandUsageInfo").execute;
 
 const maxTagLength = 26;

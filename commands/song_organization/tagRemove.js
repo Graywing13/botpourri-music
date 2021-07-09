@@ -1,3 +1,5 @@
+"use strict";
+
 const untagSingular = require("../../../../../../JavaScript/AMQ Web Scrapers/managementScripts/tagSongs").untagSingular;
 const getSongInfo = require("../music_cmd/tools/sendSongInfo").getSongInfo;
 const getSong = require("../music_cmd/tools/getSongs").getSong;
@@ -20,12 +22,18 @@ module.exports = {
     var attemptUntag = function(tags) {
       let someSuccessful = false;
       tags.forEach(tag => {
-        if (untagSingular(tag, songInfo.personalSongID.toString())) {
-          successfulUntag.push(tag);
-          someSuccessful = true;
-        } else {
+        try {
+          if (untagSingular(songInfo.personalSongID.toString(), tag)) {
+            successfulUntag.push(tag);
+            someSuccessful = true;
+          } else {
+            unsuccessfulUntag.push(tag);
+          }
+        } catch (e) {
+          console.log(`Error pushing tag ${tag}: ${e}`);
           unsuccessfulUntag.push(tag);
         }
+        
       });
       return someSuccessful;
     }
@@ -39,7 +47,6 @@ module.exports = {
         time: 30000,
         errors: ['time']
       }).then(collected => {
-        console.log(collected);
         let m = collected.first();
         let toUntag = turnIndexToTag(songInfo.tags, m);
         attemptUntag(toUntag);

@@ -1,3 +1,5 @@
+"use strict";
+
 // TODO what on earth is this
 module.exports = {
   getUserFromMention: function(msg, mention) {

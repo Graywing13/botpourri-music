@@ -1,3 +1,5 @@
+"use strict";
+
 const sendCommandUsageInfo = require("../general_cmd/sendCommandUsageInfo");
 const queueSonginfo = require("./tools/queueSonginfo");
 const flag = require("../general_cmd/tools/flag");

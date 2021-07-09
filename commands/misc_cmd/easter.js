@@ -1,3 +1,5 @@
+"use strict";
+
 module.exports = { // module.exports is how data in Node.js is exported for require() in other files
   name: 'easter',
   description: 'Easter >:)',

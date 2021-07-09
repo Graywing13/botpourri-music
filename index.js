@@ -1,3 +1,5 @@
+"use strict";
+
 // importing dependencies 
 const Discord = require('discord.js');
 const { prefix } = require('./config.json');

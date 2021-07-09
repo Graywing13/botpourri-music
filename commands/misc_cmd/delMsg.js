@@ -1,3 +1,5 @@
+"use strict";
+
 module.exports = { 
   name: 'delmsg',
   description: 'b.delmsg <int 1-100>',

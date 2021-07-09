@@ -1,3 +1,5 @@
+"use strict";
+
 // about promises: https://stackoverflow.com/a/56095793
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);

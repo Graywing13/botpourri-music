@@ -1,3 +1,5 @@
+"use strict";
+
 const sendSongInfo = require("./tools/sendSongInfo").execute;
 const getSongInfo = require("./tools/sendSongInfo").getSongInfo;
 const getWebmLength = require("./tools/getWebmLength").execute;

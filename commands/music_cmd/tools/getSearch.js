@@ -1,3 +1,5 @@
+"use strict";
+
 module.exports = {
   execute: function(args) {
     let toSearch = "";

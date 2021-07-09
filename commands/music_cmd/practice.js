@@ -1,3 +1,5 @@
+"use strict";
+
 // TODO move songfile to inside musicbpri
 const shuffleArray = require("./tools/shuffleArray").execute;
 const play = require("./play").execute;

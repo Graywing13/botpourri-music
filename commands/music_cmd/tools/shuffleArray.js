@@ -1,3 +1,5 @@
+"use strict";
+
 // fisher-yates alg
 function shuffle(array) {
   var currentIndex = array.length
