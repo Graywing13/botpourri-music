@@ -12,11 +12,11 @@ module.exports = {
     serverQueue.playing = false;
     serverQueue.loop = false;
     serverQueue.queueLoop = false;
-    serverQueue.memberVoiceState = null;
+    serverQueue.memberVoiceState = undefined;
     serverQueue.initialized = false;
-    serverQueue.connection = null;
+    serverQueue.connection = undefined;
     
-    if (msg.guild.me.voice.channel == null) return msg.channel.send("I am not in a voice channel :upside_down:");
+    if (msg.guild.me.voice.channel == undefined) return msg.channel.send("I am not in a voice channel :upside_down:");
  
     await msg.guild.me.voice.channel.leave();
     

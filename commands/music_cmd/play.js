@@ -30,7 +30,7 @@ module.exports = {
       if (serverQueue.songs.length == 0) {
         return msg.reply("Please put a song link to start off the queue!");
       } 
-      if (msg.content.match(new RegExp('^b.\s*p(lay)?\s*$', 'i')) != null) {
+      if (msg.content.match(new RegExp('^b.\s*p(lay)?\s*$', 'i')) != undefined) {
         return (serverQueue.playing) ? (pause(msg, serverQueue)) : (resume(msg, serverQueue));
       }
     } else {

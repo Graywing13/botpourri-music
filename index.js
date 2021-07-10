@@ -99,7 +99,7 @@ client.on('message', async msg => {
       // Join the same voice channel of the author of the message if not currently in a channel
       if (!msg.member.voice.channel) {
         return msg.reply("please join a voice channel :3");
-      } else if (serverQueue.connection == null) {
+      } else if (serverQueue.connection == undefined) {
         serverQueue.connection = await msg.member.voice.channel.join();
         msg.channel.send("Joined voice channel `" + msg.guild.me.voice.channel.name + "`"); 
         msg.guild.me.voice.setSelfDeaf(true);

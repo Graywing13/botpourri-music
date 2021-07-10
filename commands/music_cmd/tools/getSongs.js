@@ -27,7 +27,7 @@ module.exports = {
 
 // the else case is last resort because apparently this caches and blocks i/o which are both bad. 
 function requireSongs(e, data) {
-  if (e === null) {
+  if (e === undefined) {
     console.log(data);
     return data;
   }

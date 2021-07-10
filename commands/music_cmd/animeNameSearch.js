@@ -32,7 +32,7 @@ module.exports = {
       for (const song in songs) {
         const songInfo = songs[song];
         const addedSong = (hasExactFlag ? (conditionalAddToQueue(msg, songInfo.animeName.toLowerCase() === toSearch, serverQueue, songInfo, msgString)) : (conditionalAddToQueue(msg, songInfo.animeName.search(new RegExp(toSearch, "i")) > -1, serverQueue, songInfo, msgString)));
-        if (addedSong != null) {
+        if (addedSong != undefined) {
           numAdded += 1;
           msgString = addedSong;
         }
