@@ -20,7 +20,7 @@ module.exports = {
     ret += ` \`${songInfo.songURL}\`).`;
     return ret;
   },
-  execute: function(msg, toPlay, displaySongInfo) {
+  sendSongInfo: function(msg, toPlay, displaySongInfo) {
     let playURL;
     let msgString = ":bird: Up next: ";
 

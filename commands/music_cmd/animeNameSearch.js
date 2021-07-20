@@ -5,7 +5,7 @@ const play = require("../music_cmd/play").execute;
 const conditionalAddToQueue = require("./tools/queueSonginfo").conditionalAddToQueue;
 const getSearch = require("../music_cmd/tools/getSearch").execute;
 const shuffleArray = require("./tools/shuffleArray").execute;
-const getSongs = require("./tools/getSongs").execute;
+const getSongs = require("./tools/getSongs").getSongs;
 
 
 module.exports = { 

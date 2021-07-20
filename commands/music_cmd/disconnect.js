@@ -16,7 +16,7 @@ module.exports = {
     serverQueue.initialized = false;
     serverQueue.connection = undefined;
     
-    if (msg.guild.me.voice.channel == undefined) return msg.channel.send("I am not in a voice channel :upside_down:");
+    if (msg.guild.me.voice.channel === undefined) return msg.channel.send("I am not in a voice channel :upside_down:");
  
     await msg.guild.me.voice.channel.leave();
     

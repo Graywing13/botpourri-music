@@ -1,8 +1,11 @@
 "use strict";
 
-const sendSongInfo = require("./tools/sendSongInfo").execute;
-const getSongInfo = require("./tools/sendSongInfo").getSongInfo;
-const getWebmLength = require("./tools/getWebmLength").execute;
+/* =====================================================================================================================
+Requires
+===================================================================================================================== */
+
+const sendSongInfo = require("./tools/sendSongInfo").sendSongInfo;
+const getWebmLength = require("./tools/getWebmLength").getWebmLength;
 const resume = require("./resume").execute;
 const pause = require("./pause").execute;
 const getFieldIfFound = require("../general_cmd/tools/field").getFieldIfFound;
@@ -16,6 +19,8 @@ module.exports = {
   requiresServerQueue: true,
   requiresSameCall: true,
   usage: "<song url>",
+  // directly callable by user. 
+  // determine what user wants to do on b.play: play youtube/catbox audio, resume/pause player
   execute: async function(msg, serverQueue, args = []) {
     const hasSamplePointField = getFieldIfFound(args, 'p'); 
     const hasNowPlayingFlag = removeFlagIfFound(args, 'np');
@@ -37,9 +42,13 @@ module.exports = {
       // #TODO: check if targetSong ends in a recognized format
       //        else look up args[all] on ytld-core and set targetSong to first found song. 
       //        let the user know which song botpourri found.  
-      let targetSong = args[0];
-      serverQueue.songs.push(targetSong);
-      verbose("\:grey_exclamation: Queued `" + targetSong + "`");
+      try {
+        let targetSong = parsePlayURL(args[0]);
+        serverQueue.songs.push(targetSong);
+        verbose("\:grey_exclamation: Queued `" + targetSong + "`");
+      } catch (e) {
+        console.log(e);
+      }
     }
     
     let connection = serverQueue.connection; // +TODO figure out what this is
@@ -85,12 +94,40 @@ module.exports = {
     if (!serverQueue.playing) {
       play_next();
     } else {
-      msg.channel.send("There is a song playing right now.")
+      msg.channel.send("There is a song playing right now.");
     }
   }
 }
 
+/* =====================================================================================================================
+Helper Functions
+===================================================================================================================== */
+
+// returns a songInfo based on the playURL passed in. 
+function parsePlayURL(playURL) {
+  const youtubeURLs = ["youtu.be", "youtube.com", "www.youtube.com"];
+  const catboxExtensions = [".mp4", ".mp3", ".webm", ".m4v"]
+  const parsedURL = new URL(playURL);
+  function checkAgainst(query, matches) {
+    return matches.some(m => {
+      return query === m;
+    })
+  }
+
+  if (checkAgainst(parsedURL.hostname, youtubeURLs)) {
+    // TODO make sure catbox ends in catbox link, make sure youtube is not a playlist- or maybe playlist works? 
+    // call play function with the ytdl
+    return playURL;
+  } else if (parsedURL.hostname === "files.catbox.moe" && parsedURL.pathname.includes(".") && checkAgainst(parsedURL.pathname.slice(parsedURL.pathname.indexOf(".") - parsedURL.pathname.length), catboxExtensions)) {
+    // TODO: look up songs based on song code or song url. search this library for this song. return it if found.
+    return playURL;
+  } else {
+    throw new Error(`Invalid website: only youtube songs and catbox song links (extensions: ${catboxExtensions.join(", ")}) are supported.`);
+  }
+}
+
 // TODO take out msg as a param, instead send the user the error message with sendCommandUsageInfo
+// decide the song start point of the current song
 function decideSamplePoint(samplePointField, msg) {
   if (!samplePointField) {
     return 0;
@@ -110,6 +147,7 @@ function decideSamplePoint(samplePointField, msg) {
   }
 }
 
+// decides what to do with the current song based on serverQueue loop settings
 function decideWhetherLoop(serverQueue) {
   if (!serverQueue.loop) {
     if (serverQueue.queueLoop) {

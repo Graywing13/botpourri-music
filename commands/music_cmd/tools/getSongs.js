@@ -4,7 +4,7 @@ const songFile = "C:/Users/chann/Desktop/Coding/JavaScript/AMQ Web Scrapers/gath
 const fs = require('fs');
 
 module.exports = {
-  execute: function() {
+  getSongs: function() {
     return require(songFile);
     var readJson = async function(path, callbackFn) {
       fs.readFile(require.resolve(path), (err, data) => {
@@ -21,7 +21,7 @@ module.exports = {
     });
   },
   getSong: function(personalSongID) {
-    return module.exports.execute()[personalSongID.toString()];
+    return module.exports.getSongs()[personalSongID.toString()];
   }
 }
 

@@ -51,20 +51,20 @@ client.on('message', async msg => {
   if (msg.content.trim().substring(0, prefix.length).toLowerCase() !== prefix || msg.author.bot) return;
   
   // set up serverQueue
-  // guild == server, the key of server is the queue we obtain (this bot is in multiple servers)
+  // guild === server, the key of server is the queue we obtain (this bot is in multiple servers)
   let serverQueue = queue.get(msg.guild.id); 
   // -TODO big coupling here with the queueConstruct creation :blobthink:
   if (!serverQueue || !(serverQueue.initialized)) {
     let queueConstruct = {
       textChannel: msg.channel,
-      memberVoiceState: null, // https://discord.js.org/#/docs/main/stable/class/VoiceState
+      memberVoiceState: undefined, // https://discord.js.org/#/docs/main/stable/class/VoiceState
       // NOTE: oh this is actually the member's voice state. 
       songs: [],
       playing: false,
       loop: false,
       queueLoop: false,
       initialized: true, // pretty much this is how botpourri knows to initialize the serverQueue
-      connection: null
+      connection: undefined
     }
     queue.set(msg.guild.id, queueConstruct);
     serverQueue = queueConstruct;
@@ -97,9 +97,9 @@ client.on('message', async msg => {
   try {
     if (command.requiresSameCall) {
       // Join the same voice channel of the author of the message if not currently in a channel
-      if (!msg.member.voice.channel) {
+      if (msg.member.voice.channel === undefined || !msg.member.voice.channel) {
         return msg.reply("please join a voice channel :3");
-      } else if (serverQueue.connection == undefined) {
+      } else if (serverQueue.connection === undefined || msg.guild.me.voice.channel === undefined) {
         serverQueue.connection = await msg.member.voice.channel.join();
         msg.channel.send("Joined voice channel `" + msg.guild.me.voice.channel.name + "`"); 
         msg.guild.me.voice.setSelfDeaf(true);

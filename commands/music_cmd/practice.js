@@ -7,7 +7,7 @@ const removeFlagIfFound = require("../general_cmd/tools/flag").removeFlagIfFound
 const getFieldIfFound = require("../general_cmd/tools/field").getFieldIfFound;
 const parseFieldRange = require("../general_cmd/tools/field").parseFieldRange;
 const addToQueue = require("./tools/queueSonginfo").addToQueue;
-const getSongs = require("./tools/getSongs").execute;
+const getSongs = require("./tools/getSongs").getSongs;
 
 module.exports = { 
   name: 'practice',
