@@ -3,6 +3,7 @@
 /* =============================== lookup.js: finds information about the given song. =============================== */
 const getSong = require("./tools/getSongs").getSong;
 
+
 module.exports = {
   name: 'lookup',
   alias: 'lu',
@@ -28,5 +29,3 @@ module.exports = {
     throw new Error(`Cannot find song ${query}.`);
   }
 }
-
-module.exports.execute("0")

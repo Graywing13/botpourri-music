@@ -12,8 +12,8 @@ const removeFlagIfFound = require('../general_cmd/tools/flag').removeFlagIfFound
 module.exports = { 
   name: 'testpath',
   alias: 'tp',
-  description: 'wasd to move. (j)uice (f)air',
-  args: 2,
+  description: '8456 as ↑←↓→, (j)uice (c)offee (n)ightclub (b)allroom etc. ',
+  args: 1,
   usage: "testpath <gameboard image link> <movement string>",
   // directly callable by user. 
   // test the karuta date path given, and send an embed based on whether it works / fails + the path taken. 
@@ -160,7 +160,7 @@ function testPath(path) {
           
       }
 
-      console.log(`${i} | ${meters} | ${out}`);
+      console.log(`${i + 1} | ${meters} | ${out}`);
 
       for (let n = 0; n < meters.length; n++) {
         if (meters[n] <= 0) return `FAIL: ${['gas', 'food', 'drink', 'entertainment'][n]} meter <= 0 on turn ${i + 1}`;
@@ -227,3 +227,5 @@ function translateEmoji(toTranslate) {
   }
   return emojiDictionary[toTranslate];
 }
+
+testPath("8p8f844c5m666g88w888n4g44")
