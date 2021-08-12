@@ -22,6 +22,7 @@ module.exports = {
     const fArgs = args.filter(arg => arg.match(/^\-/));
     const hasExactFlag = removeFlagIfFound(fArgs, 'e');
     const hasShuffleFlag = removeFlagIfFound(fArgs, 's');
+    const hasTypeFlag = removeFlagIfFound(fArgs, 't');
     // 1. get search
     let toSearch = getSearch(regArgs);
 

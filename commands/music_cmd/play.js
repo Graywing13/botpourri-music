@@ -10,6 +10,7 @@ const resume = require("./resume").execute;
 const pause = require("./pause").execute;
 const getFieldIfFound = require("../general_cmd/tools/field").getFieldIfFound;
 const removeFlagIfFound = require("../general_cmd/tools/flag").removeFlagIfFound;
+const queueLoop = require("./queueLoop").queueLoop;
 
 module.exports = { 
   name: 'play',
@@ -151,7 +152,7 @@ function decideSamplePoint(samplePointField, msg) {
 function decideWhetherLoop(serverQueue) {
   if (!serverQueue.loop) {
     if (serverQueue.queueLoop) {
-      serverQueue.songs.push(serverQueue.songs[0]);
+      queueLoop(serverQueue);
     }
     serverQueue.songs.shift();
   } 

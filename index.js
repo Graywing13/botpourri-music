@@ -4,8 +4,7 @@
 const Discord = require('discord.js');
 const { prefix } = require('./config.json');
 const { token } = require('./gitignore/gitignore.json');
-const ytdl = require('ytdl-core');
-const fs = require('fs'); // some library that lets me interact with file system
+const fs = require('fs'); // file system interaction library
 const sendCommandUsageInfo = require('./commands/general_cmd/sendCommandUsageInfo');
  
 // create client and login using token

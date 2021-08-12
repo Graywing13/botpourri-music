@@ -18,7 +18,12 @@ module.exports = {
     
     if (msg.guild.me.voice.channel === undefined) return msg.channel.send("I am not in a voice channel :upside_down:");
  
-    await msg.guild.me.voice.channel.leave();
+    try {
+      await msg.guild.me.voice.channel.leave();
+    } catch (e) {
+      return msg.channel.send("Channel already left dechu.");
+    }
+    
     
     msg.channel.send("Successfully disconnected.");
   }
