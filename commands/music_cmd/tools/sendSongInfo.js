@@ -43,6 +43,7 @@ module.exports = {
 
     if (displaySongInfo) {
       msg.channel.send(msgString);
+      msg.channel.send("This song has been playing for " + (serverQueue.connection.dispatcher.streamTime / 1000) + "s.");
     } else {
       msg.channel.send(":see_no_evil: Playing next song... ");
     }

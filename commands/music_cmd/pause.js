@@ -9,7 +9,7 @@ module.exports = {
   usage: "<>",
   execute: async function(msg, serverQueue, args = []) {
     // TODO get mutex to serverQueue
-    serverQueue.connection.dispatcher.pause();
+    await serverQueue.connection.dispatcher.pause();
     serverQueue.playing = false;
     // TODO release mutex to serverQueue
     msg.channel.send(":pause_button: Paused.");
