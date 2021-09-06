@@ -1,3 +1,4 @@
+// known bugs: need to b.p 3 times after pausing to start song, song sometimes skips after pausing 
 "use strict";
 
 /* =====================================================================================================================

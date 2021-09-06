@@ -2,12 +2,12 @@ Code in this folder follows the following guidelines:
 
 module.exports = { 
   name: '{lowercase command name without spacees}',
-  alias: '(optional) {an alias for the command name}',
+  alias (optional): '{an alias for the command name}',
   description: 'text given in the help page',
   args: {[integer >= 0 (default)] 'whether arguments are mandatory for this command'},
   requiresSameCall: {[true / false(default)], whether this requires the user share botpourri's voice channel},
   requiresServerQueue: {[true / false(default)], whether the server queue is required},
-  usage: "(optional) {<arg_description> <arg2_description...>}",
+  usage (optional): "{<arg_description> <arg2_description...>}",
   execute: async function(msg, args) {
     {
       body of the function. 

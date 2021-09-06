@@ -1,7 +1,17 @@
+/* =================================================== field.js ========================================================
+
+Target (met): Remove and interpret fields in the user's inputs
+Priority: -
+
+Tasks: [none]
+
+Notes: [none]
+    
+===================================================================================================================== */
 "use strict";
 
 module.exports = {
-  // PURPOSE: check whether the args
+  // PURPOSE: check whether the args has field; if so, remove that field from args and return the field value
   // MODIFIES: args (only if args has that flag)
   getFieldIfFound: function(args, field) {
     let ret = false;
@@ -14,7 +24,8 @@ module.exports = {
     if (!ret) return ret;
     return ret.substring((2 + field.length));
   },
-  // returns false if a field was not provided. else return the range.
+
+  // PURPOSE: return the range ([0-100]) written in the field; returns false if a field was not provided. 
   parseFieldRange: function(field) {
     if (!field) return false;
     let ret = [0, 100];

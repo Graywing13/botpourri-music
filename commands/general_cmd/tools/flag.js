@@ -1,7 +1,17 @@
+/* =================================================== field.js ========================================================
+
+Target (met): Remove and interpret flags in the user's inputs
+Priority: -
+
+Tasks: [none]
+
+Notes: [none]
+    
+===================================================================================================================== */
 "use strict";
 
 module.exports = {
-  // PURPOSE: check whether the args
+  // PURPOSE: return whether the args have the target flag; remove it from args if so. 
   // MODIFIES: args (only if args has that flag)
   removeFlagIfFound: function(args, flag) {
     return args.some((arg, index) => {

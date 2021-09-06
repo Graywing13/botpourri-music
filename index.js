@@ -5,7 +5,7 @@ const Discord = require('discord.js');
 const { prefix } = require('./config.json');
 const { token } = require('./gitignore/gitignore.json');
 const fs = require('fs'); // file system interaction library
-const sendCommandUsageInfo = require('./commands/general_cmd/sendCommandUsageInfo');
+const sendCommandUsageInfo = require('./commands/general_cmd/help');
  
 // create client and login using token
 const client = new Discord.Client();
@@ -49,25 +49,7 @@ client.on('message', async msg => {
   // creates listener for message event, gets message and saves it into message obj
   if (msg.content.trim().substring(0, prefix.length).toLowerCase() !== prefix || msg.author.bot) return;
   
-  // set up serverQueue
-  // guild === server, the key of server is the queue we obtain (this bot is in multiple servers)
-  let serverQueue = queue.get(msg.guild.id); 
-  // -TODO big coupling here with the queueConstruct creation :blobthink:
-  if (!serverQueue || !(serverQueue.initialized)) {
-    let queueConstruct = {
-      textChannel: msg.channel,
-      memberVoiceState: undefined, // https://discord.js.org/#/docs/main/stable/class/VoiceState
-      // NOTE: oh this is actually the member's voice state. 
-      songs: [],
-      playing: false,
-      loop: false,
-      queueLoop: false,
-      initialized: true, // pretty much this is how botpourri knows to initialize the serverQueue
-      connection: undefined
-    }
-    queue.set(msg.guild.id, queueConstruct);
-    serverQueue = queueConstruct;
-  }
+  let serverQueue = module.exports.getServerQueue(msg);
  
   // check what to execute 
   const args = msg.content.slice(prefix.length).trim().split(/ +/);
@@ -128,5 +110,30 @@ module.exports = {
     } else {
       throw new Error(`${commandName} does not exist.`);
     }
+  }, 
+  // TODO move this out so that index only does the setup. serverqueue can go into songtools or smth. 
+  getServerQueue: function getServerQueue(msg) {
+    // set up serverQueue
+    // guild === server, the key of server is the queue we obtain (this bot is in multiple servers)
+    let serverQueue = queue.get(msg.guild.id); 
+
+    // -TODO big coupling here with the queueConstruct creation :blobthink:
+    if (!serverQueue || !(serverQueue.initialized)) {
+      let queueConstruct = {
+        textChannel: msg.channel,
+        memberVoiceState: undefined, // https://discord.js.org/#/docs/main/stable/class/VoiceState
+        // NOTE: oh this is actually the member's voice state. 
+        songs: [],
+        playing: false,
+        loop: false,
+        queueLoop: false,
+        initialized: true, // pretty much this is how botpourri knows to initialize the serverQueue
+        connection: undefined
+      }
+      queue.set(msg.guild.id, queueConstruct);
+      serverQueue = queueConstruct;
+    }
+    
+    return serverQueue;
   }
 }

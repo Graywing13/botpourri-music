@@ -21,6 +21,8 @@ module.exports = {
     return ret;
   },
   sendSongInfo: function(msg, toPlay, displaySongInfo) {
+    const getServerQueue = require("../../../index").getServerQueue;
+    let serverQueue = getServerQueue(msg);
     let playURL;
     let msgString = ":bird: Up next: ";
 
@@ -43,7 +45,9 @@ module.exports = {
 
     if (displaySongInfo) {
       msg.channel.send(msgString);
-      msg.channel.send("This song has been playing for " + (serverQueue.connection.dispatcher.streamTime / 1000) + "s.");
+      if (serverQueue.connection.dispatcher != null) {
+        msg.channel.send("This song has been playing for " + (serverQueue.connection.dispatcher.streamTime / 1000) + "s.");
+      }
     } else {
       msg.channel.send(":see_no_evil: Playing next song... ");
     }

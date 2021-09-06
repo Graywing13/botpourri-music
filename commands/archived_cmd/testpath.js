@@ -1,3 +1,27 @@
+/* ================================================== testPath.js ======================================================
+
+Target: Used to solve karuta date maps. 
+Current Functionality: uncomment line to check meters. 
+Priority: lowest
+
+Tasks: 
+[0] Clean up, read current code
+[1] Read date map
+[2] solve date map for path that yields the highest meters: food, drink, entertainment, ring. make sure gas > 0. 
+[3] be able to pick the ring option
+[4] find formula for how much AP the date yields
+
+Notes: 
+- be able to set ring importance with a ring meter: None, Mid (get only if not reject), High (get at all costs)
+  - if ring importance is HIGH / MED
+    - set ring meter to 0/1000 initially
+    - if total meter sum < 1000 at end of run
+      - if importance HIGH, search for shortest path to get ring successfully. Alert user that date will fail. 
+      - MID: tell user ring cannot be obtained this run.
+  - NONE: set ring meter to 1000/1000
+    
+===================================================================================================================== */
+
 "use strict";
 
 /* =====================================================================================================================
@@ -11,7 +35,6 @@ const getFieldIfFound = require('../general_cmd/tools/field').getFieldIfFound;
 const removeFlagIfFound = require('../general_cmd/tools/flag').removeFlagIfFound;
 
 var moveDictionary = {
-  // 8456gstpjcwfmnbahlr
   '8': ["🔼", "Up"],
   '4': ["◀️", "Left"],
   '5': ["🔽", "Down"],
@@ -247,7 +270,7 @@ function translateEmoji(toTranslate) {
 }
 
 
-// console.log(testPath("86f6884j4w44g4n88p666s86t")) // 24 | 40,34,76,64 | Ring U big sac
+// console.log(testPath("p886j6t8f8884g5m")) // 24 | 40,34,76,64 | Ring U big sac
 
 /* How i evaluate whether a path is good: 
  * give each road an affinity: the sum of ???

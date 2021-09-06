@@ -1,6 +1,6 @@
 "use strict";
 
-const sendCommandUsageInfo = require("../general_cmd/sendCommandUsageInfo").execute;
+const sendCommandUsageInfo = require("../general_cmd/help").execute;
 
 const maxTagLength = 26;
 const maxTagCount = 50;
